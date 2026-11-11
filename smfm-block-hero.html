@@ -37,6 +37,33 @@
 
 
 <!-- ==========================================================================
+     VARIANT A WITH THE GRADIENT RING
+     Same as A, plus the decorative ring from the Drupal homepage hero.
+     Download it from the Drupal site at
+       /themes/custom/smfm/images/ring-gradient.svg
+     upload it to Novi file uploads, and put its URL in --smfm-hero-ring below.
+     If that custom property is absent the ring simply does not render, so this
+     markup is safe to paste before the asset exists.
+     ========================================================================== -->
+<section class="smfm-hero smfm-bleed">
+  <div class="smfm-wrap smfm-hero__inner">
+
+    <div class="smfm-hero__content">
+      <h1 class="smfm-hero__title">Your SMFM Member Portal</h1>
+      <div class="smfm-hero__text">
+        <p>Manage your membership, register for meetings, access clinical guidance, and connect with the maternal-fetal medicine community.</p>
+      </div>
+    </div>
+
+    <div class="smfm-hero__media" style="--smfm-hero-ring:url('REPLACE-WITH-NOVI-RING-SVG-URL')">
+      <img src="REPLACE-WITH-NOVI-IMAGE-URL" alt="">
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ==========================================================================
      VARIANT B — same hero with an action row. A portal landing page usually
      wants at least one primary task, so this is likely the one you want;
      delete whichever variant you don't use.

@@ -191,23 +191,50 @@
 /* Circular portrait, 340px at desktop. Source art should be square and at
    least 680x680 to stay sharp on 2x displays. */
 /* The container carries the tint and the circle so an unreplaced placeholder
-   src degrades to a flat mint circle rather than a broken-image icon. */
+   src degrades to a flat mint circle rather than a broken-image icon.
+   overflow stays VISIBLE so the decorative ring can extend past the photo. */
 .smfm-hero__media {
   flex: 0 0 340px;
   max-width: 340px;
   aspect-ratio: 1 / 1;
+  position: relative;
   background: var(--smfm-mint);
   border-radius: 50%;
-  overflow: hidden;
+  overflow: visible;
 }
+
+/* Decorative gradient ring behind the photo, matching the Drupal homepage
+   hero. There it is .home-hero-media::before: a single-path SVG, inset -24.1px
+   on a 460px photo (5.2%), background-size contain, sitting at z-index 0 under
+   the image.
+
+   The ring is passed PER INSTANCE on the element's style attribute, not baked
+   into this class:
+
+     <div class="smfm-hero__media"
+          style="--smfm-hero-ring:url('https://assets.noviams.com/...svg')">
+
+   Unset, it renders nothing at all — no broken image, no empty box — so the
+   hero still works before the asset is uploaded. The spread is a percentage
+   rather than pixels so the ring tracks the photo at every breakpoint. */
+.smfm-hero__media::before {
+  content: '';
+  position: absolute;
+  inset: var(--smfm-hero-ring-spread, -5.2%);
+  background: var(--smfm-hero-ring, none) center / contain no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .smfm-hero__media img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 50%;
-  overflow: clip;
 }
 
 @media (max-width: 900px) {
