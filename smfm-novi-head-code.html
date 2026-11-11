@@ -55,7 +55,10 @@
      ========================================================================== -->
 <script>
 (function(){
-  var SELECTOR = '.smfm-bleed, .smfm-hero, .smfm-band';
+  // .smfm-label is the style-review page's own section label. It is listed
+  // here so those bars stretch edge-to-edge like the blocks they sit above,
+  // using the same mechanism rather than a one-off CSS trick.
+  var SELECTOR = '.smfm-bleed, .smfm-hero, .smfm-band, .smfm-label';
 
   function fix(){
     var vw = document.documentElement.clientWidth;

@@ -190,9 +190,15 @@
 
 /* Circular portrait, 340px at desktop. Source art should be square and at
    least 680x680 to stay sharp on 2x displays. */
+/* The container carries the tint and the circle so an unreplaced placeholder
+   src degrades to a flat mint circle rather than a broken-image icon. */
 .smfm-hero__media {
   flex: 0 0 340px;
   max-width: 340px;
+  aspect-ratio: 1 / 1;
+  background: var(--smfm-mint);
+  border-radius: 50%;
+  overflow: hidden;
 }
 .smfm-hero__media img {
   display: block;
@@ -320,7 +326,8 @@
   overflow: hidden;
 }
 
-.smfm-card__image { display: block; }
+/* Tinted so a placeholder or broken src degrades to a flat panel. */
+.smfm-card__image { display: block; background: var(--smfm-lavender-tint); }
 /* Anchor wrapping an image renders a baseline gap unless it is blockified. */
 .smfm-card__image a { display: block; line-height: 0; padding: 0; }
 .smfm-card__image img {
@@ -430,6 +437,9 @@
   flex: 0 0 var(--smfm-it-media, 40%);
   max-width: var(--smfm-it-media, 40%);
   min-width: 0;
+  background: var(--smfm-mint-tint);
+  border-radius: 8px;
+  overflow: hidden;
 }
 .smfm-image-text__media img {
   display: block;

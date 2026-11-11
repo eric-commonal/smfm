@@ -1,0 +1,236 @@
+<!--
+  SMFM Novi — Style Review page content
+  ==========================================================================
+  Paste this whole thing into the page content editor of a Novi page (suggested
+  slug: /style-review). Requires smfm-tokens.css, smfm-blocks.css and the
+  head-code script to be installed sitewide.
+
+  WHAT THIS PAGE IS
+  An internal reference showing every custom block with a "Copy Code" button
+  that puts that block's exact markup on the clipboard, ready to paste into an
+  interior page. No selecting text by hand.
+
+  WHY IT IS BUILT THIS WAY
+  - No <script> anywhere: Novi strips script tags out of pasted page content.
+    The click handling lives in the sitewide head-code script.
+  - No onclick attributes: Novi's paste-cleanup deletes any element carrying
+    one outright, the element and its text, not just the attribute.
+  - No <style> block and no wrapper divs: the label bars carry their styling
+    inline, because Novi does not reliably preserve either. `display:contents`
+    wrappers in particular collapse into empty <p> tags and content gets
+    reordered.
+  - Buttons and blocks are paired by inert data attributes, which do survive:
+    data-smfm-copy="N" on the button, data-smfm-block="N" on the block root.
+    Nothing relies on DOM adjacency, because Novi's cleanup has been seen to
+    insert stray nodes between a label and its block.
+
+  RESTRICT THIS PAGE. Use Novi's own page visibility settings rather than
+  relying on the URL being hard to guess.
+
+  VERIFY ON FIRST PASTE: the FAQ block uses native <details>/<summary>. That
+  avoids any JavaScript dependency, but whether Novi's cleanup preserves those
+  elements has not been confirmed. If the FAQ comes back flattened, say so and
+  it can be rebuilt as a head-code toggle using the same data-attribute
+  pattern as these buttons.
+
+  Images use REPLACE-WITH-NOVI-IMAGE-URL. Left unreplaced they degrade to a
+  flat tinted panel rather than a broken-image icon.
+  ==========================================================================
+-->
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:0;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Hero</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="1" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-hero smfm-bleed smfm-on-dark" data-smfm-block="1"><div class="smfm-wrap smfm-hero__inner">
+  <div class="smfm-hero__content">
+    <span class="smfm-overline">Member Portal</span>
+    <h1 class="smfm-hero__title">Your SMFM Member Portal</h1>
+    <div class="smfm-hero__text">
+      <p>Manage your membership, register for meetings, access clinical guidance, and connect with the maternal-fetal medicine community.</p>
+    </div>
+    <div class="smfm-btn-row">
+      <a class="smfm-btn smfm-btn--primary" href="#">Go to My Compass</a>
+      <a class="smfm-btn smfm-btn--secondary" href="#">Manage Membership</a>
+    </div>
+  </div>
+  <div class="smfm-hero__media"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></div>
+</div></section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>CTA &mdash; Dark</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="2" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-cta smfm-cta--dark smfm-on-dark" data-smfm-block="2">
+  <div class="smfm-cta__content">
+    <span class="smfm-overline">Renew for 2027</span>
+    <h2 class="smfm-cta__headline">Your membership expires in 30 days</h2>
+    <p class="smfm-cta__subhead">Renew now to keep uninterrupted access to clinical guidance and member meeting rates.</p>
+  </div>
+  <div class="smfm-cta__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Renew Now</a></div></div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>CTA &mdash; Lavender</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="3" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-cta smfm-cta--lavender" data-smfm-block="3">
+  <div class="smfm-cta__content">
+    <span class="smfm-overline">Pregnancy Meeting</span>
+    <h2 class="smfm-cta__headline">Registration is open</h2>
+    <p class="smfm-cta__subhead">Member rates apply automatically when you are signed in.</p>
+  </div>
+  <div class="smfm-cta__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Register</a></div></div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>CTA &mdash; Mint, Compact</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="4" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-cta smfm-cta--mint smfm-cta--compact" data-smfm-block="4">
+  <div class="smfm-cta__content">
+    <h2 class="smfm-cta__headline">Update your practice profile</h2>
+    <p class="smfm-cta__subhead">Keeps the member directory accurate for referrals.</p>
+  </div>
+  <div class="smfm-cta__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Edit Profile</a></div></div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Cards &mdash; 3 Column</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="5" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-cards smfm-cards--cols-3" data-smfm-block="5">
+  <h2 class="smfm-cards__title">Member resources</h2>
+  <div class="smfm-cards__grid">
+    <article class="smfm-card">
+      <div class="smfm-card__image"><a href="#"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></a></div>
+      <div class="smfm-card__body">
+        <h3 class="smfm-card__headline"><a href="#">Clinical Guidance Library</a></h3>
+        <p class="smfm-card__subhead">Consult Series</p>
+        <div class="smfm-card__text"><p>Evidence-based statements and consult series for maternal-fetal medicine specialists.</p></div>
+        <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Browse</a></div></div>
+      </div>
+    </article>
+    <article class="smfm-card">
+      <div class="smfm-card__image"><a href="#"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></a></div>
+      <div class="smfm-card__body">
+        <h3 class="smfm-card__headline"><a href="#">The Pregnancy Meeting</a></h3>
+        <p class="smfm-card__subhead">Annual Meeting</p>
+        <div class="smfm-card__text"><p>Abstracts, programming and registration for the annual scientific meeting.</p></div>
+        <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Details</a></div></div>
+      </div>
+    </article>
+    <article class="smfm-card">
+      <div class="smfm-card__image"><a href="#"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></a></div>
+      <div class="smfm-card__body">
+        <h3 class="smfm-card__headline"><a href="#">Advocacy Toolkit</a></h3>
+        <p class="smfm-card__subhead">Health Policy</p>
+        <div class="smfm-card__text"><p>Resources for engaging policymakers on maternal health priorities.</p></div>
+        <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Open</a></div></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Cards &mdash; 2 Column, Mint, No Image</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="6" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-cards smfm-cards--cols-2 smfm-cards--mint" data-smfm-block="6">
+  <div class="smfm-cards__grid">
+    <article class="smfm-card"><div class="smfm-card__body">
+      <h3 class="smfm-card__headline">Dues &amp; Invoices</h3>
+      <div class="smfm-card__text"><p>View open invoices, download receipts and update your payment method.</p></div>
+      <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">View Invoices</a></div></div>
+    </div></article>
+    <article class="smfm-card"><div class="smfm-card__body">
+      <h3 class="smfm-card__headline">Committee Service</h3>
+      <div class="smfm-card__text"><p>See your current appointments and apply for open committee seats.</p></div>
+      <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">My Committees</a></div></div>
+    </div></article>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Image + Text &mdash; Purple</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="7" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-image-text smfm-image-text--purple smfm-image-text--padded smfm-on-dark" data-smfm-block="7">
+  <div class="smfm-image-text__media"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></div>
+  <div class="smfm-image-text__body">
+    <span class="smfm-overline">Fellows &amp; Trainees</span>
+    <h2 class="smfm-image-text__headline">Built for the next generation of MFM</h2>
+    <div class="smfm-image-text__subhead"><p>Reduced dues, mentorship matching and trainee-only programming at the annual meeting.</p></div>
+    <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Explore Benefits</a></div>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Image + Text &mdash; Lavender, Flipped, 30% Media</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="8" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-image-text smfm-image-text--lavender smfm-image-text--flip smfm-image-text--w30 smfm-image-text--padded" data-smfm-block="8">
+  <div class="smfm-image-text__media"><img src="REPLACE-WITH-NOVI-IMAGE-URL" alt=""></div>
+  <div class="smfm-image-text__body">
+    <span class="smfm-overline">SMFM Foundation</span>
+    <h2 class="smfm-image-text__headline">Support research that changes outcomes</h2>
+    <div class="smfm-image-text__subhead"><p>Foundation grants fund investigators working on the hardest problems in high-risk pregnancy.</p></div>
+    <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Give Now</a><a class="smfm-btn smfm-btn--secondary" href="#">See Grantees</a></div>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>FAQ</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="9" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-faq" data-smfm-block="9">
+  <h2 class="smfm-faq__title">Membership questions</h2>
+  <div class="smfm-faq__list">
+    <details class="smfm-faq__item" open>
+      <summary class="smfm-faq__question">When do dues renew?</summary>
+      <div class="smfm-faq__answer"><p>Membership runs on a calendar year. Renewal notices go out in November and access continues uninterrupted if you renew before January 31.</p></div>
+    </details>
+    <details class="smfm-faq__item">
+      <summary class="smfm-faq__question">Can I transfer my meeting registration?</summary>
+      <div class="smfm-faq__answer"><p>Registrations are transferable to another member up to two weeks before the meeting. Contact the membership team to process the change.</p></div>
+    </details>
+    <details class="smfm-faq__item">
+      <summary class="smfm-faq__question">How do I update my practice information?</summary>
+      <div class="smfm-faq__answer"><p>Edit your profile from the member portal. Directory listings refresh within one business day.</p></div>
+    </details>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Quote</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="10" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<blockquote class="smfm-quote" data-smfm-block="10">
+  <div class="smfm-quote__text"><p>Replace with a real member or leadership quote.</p></div>
+  <p class="smfm-quote__attribution">Name, MD &mdash; Role, Institution</p>
+</blockquote>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Band &mdash; Photo Background</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="11" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-band smfm-band--photo smfm-bleed smfm-on-dark" data-smfm-block="11" style="--smfm-band-photo:url('REPLACE-WITH-NOVI-IMAGE-URL')">
+  <div class="smfm-wrap">
+    <span class="smfm-overline">Why it matters</span>
+    <h2>One in ten pregnancies is high risk</h2>
+    <p>The photo is passed per instance on the section's style attribute, so one class covers any number of photos. Unset, it falls back to flat purple.</p>
+    <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Learn More</a></div>
+  </div>
+</section>
+
+<div class="smfm-label" style="box-sizing:border-box;background:#28094D;color:#fff;font:600 13px/1.4 Poppins,-apple-system,Segoe UI,sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:14px 20px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+<span>Band &mdash; Lavender Tint</span>
+<button type="button" class="smfm-copy-btn" data-smfm-copy="12" style="box-sizing:border-box;flex:0 0 auto;background:#fff;color:#28094D;border:none;border-radius:6px;padding:6px 14px;font:700 12px/1 Poppins,sans-serif;letter-spacing:.02em;text-transform:none;cursor:pointer;">Copy Code</button>
+</div>
+<section class="smfm-band smfm-band--lavender smfm-bleed" data-smfm-block="12">
+  <div class="smfm-wrap smfm-wrap--narrow">
+    <span class="smfm-overline">Section Label</span>
+    <h2>A tinted band to break up a long page</h2>
+    <p>Use this to separate sections on a long interior page. Swap the modifier class for mint or purple.</p>
+  </div>
+</section>

@@ -15,6 +15,7 @@ remembers to update.
 | `smfm-blocks.css` | The custom block components. Loads second, depends on the tokens. |
 | `smfm-novi-head-code.html` | Reference copy of what goes in Novi's head-code field: font links, the two stylesheet links, and the sitewide scripts. |
 | `smfm-block-hero.html` | Hero block markup, to paste into a Novi page content editor. |
+| `smfm-style-review-page.html` | Page content for an internal `/style-review` page: every block with a Copy Code button. Restrict it with Novi's page visibility settings. |
 | `smfm-blocks-preview.html` | Local preview harness. Open it in a browser directly. |
 
 ## Deployment
