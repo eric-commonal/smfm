@@ -1069,10 +1069,14 @@ footer :is(a, span, li, button, p, div, h1, h2, h3, h4, h5, strong, em):not(i):n
    content. Delete a line here to bring one back. */
 .c-body-content__homepage .section.featured-slider,
 .c-body-content__homepage .section.upcoming,
-.c-body-content__homepage .section.we-are,
-.c-body-content__homepage #resources.single-region {
+.c-body-content__homepage .section.we-are {
   display: none !important;
 }
+
+/* #resources is deliberately NOT hidden. It is a single-region section, which
+   makes it a usable drop zone for custom blocks — blocks manage their own
+   layout and want a single region rather than one of Novi's multi-column
+   sections. #about-association is a second one, also left alone. */
 
 /* ==========================================================================
    9. DARK SURFACES — must come last
