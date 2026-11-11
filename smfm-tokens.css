@@ -104,6 +104,26 @@ body {
   color: var(--smfm-ink);
 }
 
+/* Header and footer chrome.
+   The rule above is inherited, so it does not reach the main nav: Novi sets
+   font-family explicitly on those links and an explicit declaration always
+   beats an inherited one. Hence the targeted override.
+
+   ICONS ARE EXCLUDED, and this is not optional. Font Awesome works by setting
+   font-family on the element and rendering a glyph from a private code point.
+   Force Poppins onto it and the icon becomes a stray letter. The :not()
+   clauses below keep the search, chevron and hamburger icons on their own
+   font. `font-family: revert` does NOT work as a way to restore them — it
+   rolls back to the user-agent origin, not to Font Awesome's rule — so the
+   icons have to be excluded from the match rather than repaired after it.
+
+   Only font-family is touched. Colour, size, spacing and layout in the header
+   and footer are left to Novi. */
+header :is(a, span, li, button, p, div, h1, h2, h3, h4, h5, strong, em, label, input, select):not(i):not([class*="fa-"]):not(.fa),
+footer :is(a, span, li, button, p, div, h1, h2, h3, h4, h5, strong, em):not(i):not([class*="fa-"]):not(.fa) {
+  font-family: var(--smfm-font-body) !important;
+}
+
 /* Headings are scoped to .body-content so Novi's header, nav, footer and
    system chrome keep their own treatment. Novi's theme sets heading color and
    size with its own hover and anchor rules, and the Phase 1 work established

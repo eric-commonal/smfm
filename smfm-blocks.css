@@ -714,6 +714,17 @@
    .c-body-content__homepage #blocks.single-region { display: none !important; }
 */
 
+/* HOMEPAGE: stock Novi sections not being carried into the new design.
+   Each was verified to match exactly one element on the page. Hiding rather
+   than deleting, because these are Novi template regions rather than page
+   content. Delete a line here to bring one back. */
+.c-body-content__homepage .section.featured-slider,
+.c-body-content__homepage .section.upcoming,
+.c-body-content__homepage .section.we-are,
+.c-body-content__homepage #resources.single-region {
+  display: none !important;
+}
+
 /* ==========================================================================
    9. DARK SURFACES — must come last
    --------------------------------------------------------------------------
