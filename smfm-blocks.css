@@ -685,6 +685,36 @@
 .smfm-stack-gap > * + * { margin-top: var(--smfm-pad-section); }
 
 /* ==========================================================================
+   10. PER-PAGE OVERRIDES
+   --------------------------------------------------------------------------
+   Page-specific fixes, scoped by the body-content slug class. Keep these few
+   and keep them labelled — this is the section that rots.
+
+   HOMEPAGE: Novi's own stylesheet paints the #blocks section purple
+   (#550861). It is a block-level setting with no page-editor control, and
+   the Phase 1 notes concluded it could not be fixed from CSS. That is true of
+   CSS written from *inside* the block, but the section element itself is
+   targetable and an !important override wins — verified on staging, the
+   colour is not an inline style.
+
+   CAUTION: two sections on the homepage share id="blocks" (duplicate ids,
+   invalid HTML, but that is what Novi emits). They are told apart only by
+   their second class, .single-region vs .triple-region. Never select on
+   #blocks alone; it matches both.
+   ========================================================================== */
+
+.c-body-content__homepage #blocks.single-region {
+  background-color: var(--smfm-white) !important;
+}
+
+/* Alternative, if you would rather remove that block entirely and rebuild the
+   row in the .triple-region section below it. Swap this in for the rule above
+   — do not run both.
+
+   .c-body-content__homepage #blocks.single-region { display: none !important; }
+*/
+
+/* ==========================================================================
    9. DARK SURFACES — must come last
    --------------------------------------------------------------------------
    Light and dark backgrounds are genuinely different problems. A block's own

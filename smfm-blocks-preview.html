@@ -1014,6 +1014,36 @@ body {
 .smfm-stack-gap > * + * { margin-top: var(--smfm-pad-section); }
 
 /* ==========================================================================
+   10. PER-PAGE OVERRIDES
+   --------------------------------------------------------------------------
+   Page-specific fixes, scoped by the body-content slug class. Keep these few
+   and keep them labelled — this is the section that rots.
+
+   HOMEPAGE: Novi's own stylesheet paints the #blocks section purple
+   (#550861). It is a block-level setting with no page-editor control, and
+   the Phase 1 notes concluded it could not be fixed from CSS. That is true of
+   CSS written from *inside* the block, but the section element itself is
+   targetable and an !important override wins — verified on staging, the
+   colour is not an inline style.
+
+   CAUTION: two sections on the homepage share id="blocks" (duplicate ids,
+   invalid HTML, but that is what Novi emits). They are told apart only by
+   their second class, .single-region vs .triple-region. Never select on
+   #blocks alone; it matches both.
+   ========================================================================== */
+
+.c-body-content__homepage #blocks.single-region {
+  background-color: var(--smfm-white) !important;
+}
+
+/* Alternative, if you would rather remove that block entirely and rebuild the
+   row in the .triple-region section below it. Swap this in for the rule above
+   — do not run both.
+
+   .c-body-content__homepage #blocks.single-region { display: none !important; }
+*/
+
+/* ==========================================================================
    9. DARK SURFACES — must come last
    --------------------------------------------------------------------------
    Light and dark backgrounds are genuinely different problems. A block's own
@@ -1288,6 +1318,21 @@ body {
       </section>
 
       <!-- ======================= IMAGE + TEXT ========================= -->
+      <div class="pv-bar"><span>Single card &mdash; for one Novi column <code>.smfm-card</code> alone</span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="13">Copy Code</button></div>
+      <p style="font:400 14px/1.6 'Poppins',sans-serif;color:#41464C;margin:16px 0;">Use this, not the cards block above, when pasting into one column of a Novi multi-region section. No grid wrapper, so it fills whatever column it lands in. Shown here at half width to make the point.</p>
+      <div style="max-width:50%;">
+        <article class="smfm-card" data-smfm-block="13">
+          <div class="smfm-card__image"><a href="#"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400'%3E%3Crect width='640' height='400' fill='%23F1ECFA'/%3E%3C/svg%3E" alt=""></a></div>
+          <div class="smfm-card__body">
+            <h3 class="smfm-card__headline"><a href="#">Clinical Guidance Library</a></h3>
+            <p class="smfm-card__subhead">Consult Series</p>
+            <div class="smfm-card__text"><p>Evidence-based statements and consult series for maternal-fetal medicine specialists.</p></div>
+            <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Browse</a></div></div>
+          </div>
+        </article>
+      </div>
+
       <div class="pv-bar"><span>Image + Text &mdash; purple, 40/60 <code>.smfm-image-text--purple</code></span>
         <button type="button" class="smfm-copy-btn" data-smfm-copy="7">Copy Code</button></div>
       <section class="smfm-image-text smfm-image-text--purple smfm-image-text--padded smfm-on-dark" data-smfm-block="7">
