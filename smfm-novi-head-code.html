@@ -1,0 +1,158 @@
+<!-- ==========================================================================
+     SMFM Novi — head code
+     Paste this whole block into Novi's head-code / Custom Scripts field.
+     Order matters: these <link> tags must come after Novi's own theme CSS,
+     which is what pasting here achieves.
+
+     Source of truth is https://github.com/eric-commonal/smfm. Edit the CSS
+     there, not in Novi's Custom CSS field — two copies will drift.
+     ========================================================================== -->
+
+<!-- Fonts: Domine (headings) + Poppins (body), matching the Drupal site.
+     Novi's theme loads Barlow; this does not remove it, so anything still
+     referencing Barlow keeps working. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="https://eric-commonal.github.io/smfm/smfm-tokens.css" rel="stylesheet" type="text/css">
+<link href="https://eric-commonal.github.io/smfm/smfm-blocks.css" rel="stylesheet" type="text/css">
+
+<!-- ==========================================================================
+     1. FULL-BLEED SECTION FIX
+     --------------------------------------------------------------------------
+     Re-derived for SMFM's Novi theme. The ASAP version of this script keyed
+     off .inner-content and novi-content-wrapper; neither exists here, so the
+     selector list and the surrounding assumptions are different. What was
+     verified on smfm.novistaging.com on 2026-11-11:
+
+       Homepage       body > .body-content.c-body-content__homepage
+                      > .section.single-region (and .triple-region, etc.)
+                      .body-content runs at full viewport width, padding 0.
+
+       Interior page  body > .body-content.c-body-content__<slug>
+                      > .container > .row > .o-column > ...
+                      Content is inset roughly 30px each side.
+
+     Because the two templates inset content differently, a pure-CSS breakout
+     (width:100vw plus negative margin) lands correctly on one and lopsided on
+     the other. This script measures each target's real in-flow position and
+     sets an exact inline margin and width to reach the true viewport edges,
+     so it holds whatever the nesting turns out to be. Safe no-op on pages
+     with none of the target classes.
+
+     Adding a selector here: if the element also has its own CSS-based
+     breakout (left/transform, as Novi's .header-ribbon uses), the reset step
+     must neutralise left and transform too, not just margin and width —
+     otherwise the stylesheet's breakout stays underneath and this correction
+     stacks on top of it instead of replacing it. That mismatch is exactly
+     what produced the "pushed to one side" bugs on the ASAP build.
+
+     Contract with the CSS: never declare margin-left, margin-right or width
+     on these elements in smfm-blocks.css, and never override the inline
+     values this script writes. Inner content re-centres via .smfm-wrap.
+     ========================================================================== -->
+<script>
+(function(){
+  var SELECTOR = '.smfm-bleed, .smfm-hero, .smfm-band';
+
+  function fix(){
+    var vw = document.documentElement.clientWidth;
+    var sections = document.querySelectorAll(SELECTOR);
+    for (var i = 0; i < sections.length; i++){
+      var el = sections[i];
+      // Reset first, so we measure the natural in-flow position rather than a
+      // previous run's correction or a stylesheet breakout.
+      el.style.marginLeft = '';
+      el.style.marginRight = '';
+      el.style.width = '';
+      el.style.left = 'auto';
+      el.style.transform = 'none';
+      var rect = el.getBoundingClientRect();
+      el.style.marginLeft = (-rect.left) + 'px';
+      el.style.marginRight = '0';
+      el.style.width = vw + 'px';
+    }
+  }
+
+  function debounce(fn, wait){
+    var t;
+    return function(){ clearTimeout(t); t = setTimeout(fn, wait); };
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fix);
+  } else {
+    fix();
+  }
+  window.addEventListener('load', fix);
+  window.addEventListener('resize', debounce(fix, 150));
+})();
+</script>
+
+<!-- ==========================================================================
+     2. STYLE-REVIEW "COPY CODE" BUTTONS
+     --------------------------------------------------------------------------
+     Delegated click handler for the internal block-reference page. Inert on
+     every other page, so it is safe to install now and build the page later.
+
+     Why it is built this way, carried over from the ASAP project:
+       - Novi's paste-cleanup deletes any element carrying an onclick
+         attribute outright, the element and its text, not just the attribute.
+         So the buttons carry no onclick.
+       - Novi does not preserve <div style="display:contents"> wrappers; they
+         collapse into empty <p> tags and content gets reordered. So there is
+         no wrapper, and nothing relies on DOM adjacency between a label and
+         its block.
+       - Novi strips <script> from pasted content, which is why this lives in
+         head code rather than on the page.
+
+     Pairing is by inert data attributes, which do survive the cleanup:
+     data-smfm-copy="N" on the button, data-smfm-block="N" on the block's own
+     root element.
+     ========================================================================== -->
+<script>
+(function(){
+  function copyText(str, done){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(str).then(function(){ done(true); }, function(){ legacy(); });
+    } else {
+      legacy();
+    }
+    function legacy(){
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = str;
+        ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta);
+        ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        done(ok);
+      } catch (e) {
+        done(false);
+      }
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.smfm-copy-btn') : null;
+    if (!btn) return;
+    var id = btn.getAttribute('data-smfm-copy');
+    var block = document.querySelector('[data-smfm-block="' + id + '"]');
+    var original = btn.textContent;
+    if (!block) {
+      btn.textContent = 'Copy failed';
+      setTimeout(function(){ btn.textContent = original; }, 1500);
+      return;
+    }
+    // Strip the page's own bookkeeping attribute out of the copied markup.
+    var html = block.outerHTML.replace(/\s*data-smfm-block="[^"]*"/, '');
+    copyText(html, function(ok){
+      btn.textContent = ok ? 'Copied!' : 'Copy failed';
+      setTimeout(function(){ btn.textContent = original; }, 1500);
+    });
+  });
+})();
+</script>

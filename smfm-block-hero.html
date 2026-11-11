@@ -1,0 +1,64 @@
+<!-- ==========================================================================
+     SMFM Member Portal — Hero block
+     Paste into Novi's page content editor. Requires smfm-tokens.css,
+     smfm-blocks.css and the head-code script.
+
+     Repurposed from the Drupal homepage hero. The search form and the
+     "How can we improve?" link are omitted as requested. The bold
+     "How can we help you today?" line went with them: it existed only to
+     introduce the search field, so it reads as an orphan once search is gone.
+
+     No <script>, no onclick, no display:contents wrapper — all three are
+     removed or rewritten by Novi's paste-cleanup.
+
+     Image: square source, 680x680 or larger (displays at 340px, so this
+     keeps it sharp on 2x screens). Upload to Novi file uploads and replace
+     the src. A missing src leaves a blank circle rather than a broken-image
+     icon.
+     ========================================================================== -->
+
+<!-- VARIANT A — faithful to the Drupal hero: headline, copy, circular photo -->
+<section class="smfm-hero smfm-bleed">
+  <div class="smfm-wrap smfm-hero__inner">
+
+    <div class="smfm-hero__content">
+      <h1 class="smfm-hero__title">Your SMFM Member Portal</h1>
+      <div class="smfm-hero__text">
+        <p>Manage your membership, register for meetings, access clinical guidance, and connect with the maternal-fetal medicine community.</p>
+      </div>
+    </div>
+
+    <div class="smfm-hero__media">
+      <img src="REPLACE-WITH-NOVI-IMAGE-URL" alt="">
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     VARIANT B — same hero with an action row. A portal landing page usually
+     wants at least one primary task, so this is likely the one you want;
+     delete whichever variant you don't use.
+     ========================================================================== -->
+<section class="smfm-hero smfm-bleed smfm-on-dark">
+  <div class="smfm-wrap smfm-hero__inner">
+
+    <div class="smfm-hero__content">
+      <span class="smfm-overline">Member Portal</span>
+      <h1 class="smfm-hero__title">Your SMFM Member Portal</h1>
+      <div class="smfm-hero__text">
+        <p>Manage your membership, register for meetings, access clinical guidance, and connect with the maternal-fetal medicine community.</p>
+      </div>
+      <div class="smfm-btn-row">
+        <a class="smfm-btn smfm-btn--primary" href="/member-compass">Go to My Compass</a>
+        <a class="smfm-btn smfm-btn--secondary" href="/membership-information">Manage Membership</a>
+      </div>
+    </div>
+
+    <div class="smfm-hero__media">
+      <img src="REPLACE-WITH-NOVI-IMAGE-URL" alt="">
+    </div>
+
+  </div>
+</section>

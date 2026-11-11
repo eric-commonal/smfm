@@ -1,0 +1,77 @@
+# SMFM Novi — custom styles and content blocks
+
+Custom CSS and HTML blocks for SMFM's Novi site (`smfm.novistaging.com`), which
+becomes the Member Portal. Served to Novi via GitHub Pages.
+
+**This repo is the source of truth for the CSS.** Do not also keep a copy in
+Novi's Custom CSS field — two copies drift, and Novi's is the one nobody
+remembers to update.
+
+## Files
+
+| File | What it is |
+|---|---|
+| `smfm-tokens.css` | Design tokens plus a narrow set of global typography overrides. Loads first. |
+| `smfm-blocks.css` | The custom block components. Loads second, depends on the tokens. |
+| `smfm-novi-head-code.html` | Reference copy of what goes in Novi's head-code field: font links, the two stylesheet links, and the sitewide scripts. |
+| `smfm-block-hero.html` | Hero block markup, to paste into a Novi page content editor. |
+| `smfm-blocks-preview.html` | Local preview harness. Open it in a browser directly. |
+
+## Deployment
+
+1. The two stylesheets are served from GitHub Pages:
+   - `https://eric-commonal.github.io/smfm/smfm-tokens.css`
+   - `https://eric-commonal.github.io/smfm/smfm-blocks.css`
+2. Novi's head-code field carries the contents of `smfm-novi-head-code.html`.
+   That field is pasted once; after that, pushing to this repo updates the live
+   site with no Novi change.
+3. Block markup is pasted per page into Novi's page content editor.
+
+Expect a minute or two of cache lag between a push and the live site. Hard
+refresh before assuming a change failed.
+
+## Where the design comes from
+
+Every value in `smfm-tokens.css` was derived from computed styles on
+`test-smfm.pantheonsite.io` (the Drupal rebuild), measured 2026-11-11. That
+site ships no CSS custom properties, so nothing could be copied directly.
+
+The block vocabulary deliberately mirrors the Drupal component system so one
+mental model covers both properties. The mapping table is at the top of
+`smfm-blocks.css`.
+
+## Things that will bite you
+
+- **Novi strips `<script>` from pasted page content.** All JavaScript lives in
+  the head-code field. Block markup never carries its own script.
+- **Novi deletes any element with an `onclick` attribute** — the whole element,
+  not just the attribute. Use a class plus a `data-*` attribute and a delegated
+  handler.
+- **Novi does not preserve `<div style="display:contents">` wrappers.** They
+  collapse into empty `<p>` tags and content gets reordered. Never rely on
+  wrapper divs or sibling adjacency; match by `data-*` attribute.
+- **Nesting depth varies by template.** The homepage puts `.body-content`
+  directly under `<body>` at full width; interior pages nest through
+  `.container > .row > .o-column` and inset content. Do not write selectors
+  that depend on exact nesting or `:first-child`.
+- **Full-bleed sections are positioned by script, not CSS.** Anything carrying
+  `smfm-bleed` gets inline `margin-left` / `margin-right` / `width` from the
+  head-code script. Never declare those properties on those elements in CSS,
+  and never override the inline values. Inner content re-centres via
+  `.smfm-wrap`.
+- **The global heading rules in `smfm-tokens.css` are `!important`.** Any
+  dark-surface text override has to out-specify them *and* explicitly exempt
+  anything that is not white. See section 9 of `smfm-blocks.css`.
+- **Per-page CSS** is available through the body class derived from the page
+  slug (`.c-body-content__<slug>`). Verify the real class in view-source first.
+
+## Known open items
+
+- Button fill is the Drupal teal `#0BAEA3`. White on it measures 2.76:1 and
+  fails WCAG AA. `--smfm-teal-dark` (`#06605A`) gives 7.42:1. One-line swap in
+  `smfm-tokens.css`, currently not taken.
+- Novi's logged-in system pages (checkout, profile, event registration, member
+  compass) have not been inspected. Global overrides are kept to typography
+  partly for that reason.
+- Hero image is a placeholder. Needs a square source, 680x680 or larger,
+  uploaded to Novi file uploads.

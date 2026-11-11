@@ -1,0 +1,169 @@
+/* ==========================================================================
+   SMFM Novi — Token layer + narrow global overrides
+   --------------------------------------------------------------------------
+   Load order matters. This file must be linked from Novi's head-code field
+   AFTER Novi's own theme CSS (assets-staging.noviams.com/.../c/smfm/smfm.css),
+   which is what a head-code <link> does by default.
+
+   Source of truth for every value here: test-smfm.pantheonsite.io, measured
+   from computed styles on 2026-11-11 (the Drupal theme ships no CSS custom
+   properties, so values were derived, not copied).
+
+   SCOPE DECISION (deliberate): global overrides are kept to typography only.
+   Buttons, form controls, tables and layout are NOT touched globally, because
+   Novi's logged-in system pages (checkout, profile, event registration,
+   member compass) reuse .btn and Bootstrap form classes and could not be
+   inspected without a member login. Block-level styling lives in
+   smfm-blocks.css behind the smfm- namespace.
+   ========================================================================== */
+
+:root {
+  /* ---- Color ------------------------------------------------------------ */
+  --smfm-purple:        #28094D;  /* headings, hero band, primary dark      */
+  --smfm-purple-mid:    #3A1568;  /* "dark" component variant background    */
+  --smfm-teal:          #0BAEA3;  /* primary accent, quote rule             */
+  --smfm-teal-dark:     #06605A;  /* AA-safe teal for text/buttons on white */
+  --smfm-mint:          #80C8C3;  /* hero headline, overline on dark        */
+  --smfm-lavender-tint: #F1ECFA;  /* "lavender" component variant           */
+  --smfm-mint-tint:     #E2F1F0;  /* "mint" component variant               */
+  --smfm-gray-bg:       #F2F4F8;  /* quote background, soft section fill    */
+  --smfm-gray-100:      #F5F5F5;
+  --smfm-ink:           #41464C;  /* body copy                              */
+  --smfm-ink-muted:     #6B7280;  /* attribution, captions                  */
+  --smfm-border:        #EEECF4;  /* card / FAQ hairline                    */
+  --smfm-border-gray:   #DDE1E6;
+  --smfm-white:         #FFFFFF;
+
+  /* ---- Type ------------------------------------------------------------- */
+  --smfm-font-head: 'Domine', Georgia, 'Times New Roman', serif;
+  --smfm-font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Desktop scale (measured at 1147px). Tablet values are applied in the
+     media query at the bottom of this file. */
+  --smfm-h1: 48px;  --smfm-h1-lh: 55.2px;
+  --smfm-h2: 36px;  --smfm-h2-lh: 43.2px;
+  --smfm-h3: 30px;  --smfm-h3-lh: 39px;
+  --smfm-h4: 24px;  --smfm-h4-lh: 32.4px;
+  --smfm-h5: 20px;  --smfm-h5-lh: 28px;
+  --smfm-body:  16px; --smfm-body-lh: 1.65;
+  --smfm-lead:  18px; --smfm-lead-lh: 1.7;
+  --smfm-small: 14px; --smfm-small-lh: 1.6;
+
+  /* ---- Shape & depth ---------------------------------------------------- */
+  --smfm-radius:     12px;  /* cards, CTA, FAQ, image+text */
+  --smfm-radius-btn:  6px;
+  --smfm-shadow: 0 8px 24px rgba(40, 9, 77, 0.08);
+
+  /* ---- Spacing ---------------------------------------------------------- */
+  --smfm-gap-grid:    16px;  /* card grid gutter          */
+  --smfm-gap-inner:   32px;  /* CTA content gap           */
+  --smfm-gap-hero:    96px;  /* hero text-to-image gap    */
+  --smfm-pad-card:    32px;
+  --smfm-pad-cta:     32px 48px;
+  --smfm-pad-quote:   32px 40px;
+  --smfm-pad-section: 80px;  /* hero / band vertical pad  */
+  --smfm-wrap-max:    1600px;
+  --smfm-wrap-gutter: 80px;
+
+  /* ---- Buttons ---------------------------------------------------------- */
+  /* Faithful to the locked Drupal design: teal fill, white label.
+     ACCESSIBILITY NOTE — white on #0BAEA3 measures 2.76:1, below the WCAG AA
+     minimum of 4.5:1 for normal text (and below 3:1 for large text).
+     Swapping the line below to var(--smfm-teal-dark) gives 7.42:1 and passes
+     AAA while staying inside the existing palette. One-line change, no other
+     edits required. */
+  --smfm-btn-primary-bg:     var(--smfm-teal);
+  --smfm-btn-primary-fg:     var(--smfm-white);
+  --smfm-btn-secondary-fg:   var(--smfm-teal-dark);
+  --smfm-btn-secondary-bdr:  var(--smfm-teal-dark);
+}
+
+/* ==========================================================================
+   NARROW GLOBALS — typography only
+   ========================================================================== */
+
+/* Body font inherits sitewide. Purely typographic, no layout effect. */
+body {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-body);
+  line-height: var(--smfm-body-lh);
+  color: var(--smfm-ink);
+}
+
+/* Headings are scoped to .body-content so Novi's header, nav, footer and
+   system chrome keep their own treatment. Novi's theme sets heading color and
+   size with its own hover and anchor rules, and the Phase 1 work established
+   that the full chain is needed to hold a size — hence the :hover and a
+   states below. */
+.body-content h1, .body-content h1 a, .body-content h1 a:hover,
+.body-content h2, .body-content h2 a, .body-content h2 a:hover,
+.body-content h3, .body-content h3 a, .body-content h3 a:hover,
+.body-content h4, .body-content h4 a, .body-content h4 a:hover,
+.body-content h5, .body-content h5 a, .body-content h5 a:hover {
+  font-family: var(--smfm-font-head) !important;
+  color: var(--smfm-purple) !important;
+}
+
+.body-content h1, .body-content h1 a, .body-content h1 a:hover {
+  font-size: var(--smfm-h1) !important; line-height: var(--smfm-h1-lh) !important; font-weight: 400 !important;
+}
+.body-content h2, .body-content h2 a, .body-content h2 a:hover {
+  font-size: var(--smfm-h2) !important; line-height: var(--smfm-h2-lh) !important; font-weight: 400 !important;
+}
+.body-content h3, .body-content h3 a, .body-content h3 a:hover {
+  font-size: var(--smfm-h3) !important; line-height: var(--smfm-h3-lh) !important; font-weight: 400 !important;
+}
+.body-content h4, .body-content h4 a, .body-content h4 a:hover {
+  font-size: var(--smfm-h4) !important; line-height: var(--smfm-h4-lh) !important; font-weight: 700 !important;
+}
+.body-content h5, .body-content h5 a, .body-content h5 a:hover {
+  font-size: var(--smfm-h5) !important; line-height: var(--smfm-h5-lh) !important; font-weight: 700 !important;
+}
+
+/* Body copy inside page content. Drupal runs prose at 18px/1.7. */
+.body-content p {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-lead);
+  line-height: var(--smfm-lead-lh);
+  color: var(--smfm-ink);
+}
+
+/* ==========================================================================
+   RESPONSIVE TYPE
+   Novi's own heading shrink starts near 900px (established in Phase 1), not
+   the 600px you'd expect, so the tablet scale is pinned at 900px to land on
+   top of it rather than underneath it.
+   ========================================================================== */
+@media (max-width: 900px) {
+  :root {
+    --smfm-h1: 40px;  --smfm-h1-lh: 46px;
+    --smfm-h2: 32px;  --smfm-h2-lh: 38.4px;
+    --smfm-h3: 26px;  --smfm-h3-lh: 33.28px;
+    --smfm-lead: 17px;
+    --smfm-wrap-gutter: 24px;
+    --smfm-pad-section: 56px;
+    --smfm-gap-hero: 48px;
+    --smfm-pad-cta: 28px 28px;
+    --smfm-pad-quote: 24px 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --smfm-h1: 32px;  --smfm-h1-lh: 38px;
+    --smfm-h2: 26px;  --smfm-h2-lh: 32px;
+    --smfm-h3: 22px;  --smfm-h3-lh: 29px;
+    --smfm-h4: 20px;  --smfm-h4-lh: 28px;
+    --smfm-lead: 16px;
+    --smfm-wrap-gutter: 20px;
+    --smfm-pad-section: 40px;
+    --smfm-pad-card: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-content *, .body-content *::before, .body-content *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

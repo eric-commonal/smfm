@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMFM Novi Block Preview (local harness)</title>
+
+<!-- Novi's LIVE staging theme CSS. Loaded first, exactly as on the real site,
+     so these blocks are judged against the real cascade rather than a clean
+     page. If Novi changes the theme, this preview changes with it. -->
+<link rel="stylesheet" href="https://assets-staging.noviams.com/novi-core-assets/css/c/smfm/smfm.css">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Domine:wght@400..700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- The two proposed stylesheets, served as real linked files in the same
+     order they will load on Novi. -->
+<style>
+/* ===== smfm-tokens.css ===== */
+/* ==========================================================================
+   SMFM Novi — Token layer + narrow global overrides
+   --------------------------------------------------------------------------
+   Load order matters. This file must be linked from Novi's head-code field
+   AFTER Novi's own theme CSS (assets-staging.noviams.com/.../c/smfm/smfm.css),
+   which is what a head-code <link> does by default.
+
+   Source of truth for every value here: test-smfm.pantheonsite.io, measured
+   from computed styles on 2026-11-11 (the Drupal theme ships no CSS custom
+   properties, so values were derived, not copied).
+
+   SCOPE DECISION (deliberate): global overrides are kept to typography only.
+   Buttons, form controls, tables and layout are NOT touched globally, because
+   Novi's logged-in system pages (checkout, profile, event registration,
+   member compass) reuse .btn and Bootstrap form classes and could not be
+   inspected without a member login. Block-level styling lives in
+   smfm-blocks.css behind the smfm- namespace.
+   ========================================================================== */
+
+:root {
+  /* ---- Color ------------------------------------------------------------ */
+  --smfm-purple:        #28094D;  /* headings, hero band, primary dark      */
+  --smfm-purple-mid:    #3A1568;  /* "dark" component variant background    */
+  --smfm-teal:          #0BAEA3;  /* primary accent, quote rule             */
+  --smfm-teal-dark:     #06605A;  /* AA-safe teal for text/buttons on white */
+  --smfm-mint:          #80C8C3;  /* hero headline, overline on dark        */
+  --smfm-lavender-tint: #F1ECFA;  /* "lavender" component variant           */
+  --smfm-mint-tint:     #E2F1F0;  /* "mint" component variant               */
+  --smfm-gray-bg:       #F2F4F8;  /* quote background, soft section fill    */
+  --smfm-gray-100:      #F5F5F5;
+  --smfm-ink:           #41464C;  /* body copy                              */
+  --smfm-ink-muted:     #6B7280;  /* attribution, captions                  */
+  --smfm-border:        #EEECF4;  /* card / FAQ hairline                    */
+  --smfm-border-gray:   #DDE1E6;
+  --smfm-white:         #FFFFFF;
+
+  /* ---- Type ------------------------------------------------------------- */
+  --smfm-font-head: 'Domine', Georgia, 'Times New Roman', serif;
+  --smfm-font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Desktop scale (measured at 1147px). Tablet values are applied in the
+     media query at the bottom of this file. */
+  --smfm-h1: 48px;  --smfm-h1-lh: 55.2px;
+  --smfm-h2: 36px;  --smfm-h2-lh: 43.2px;
+  --smfm-h3: 30px;  --smfm-h3-lh: 39px;
+  --smfm-h4: 24px;  --smfm-h4-lh: 32.4px;
+  --smfm-h5: 20px;  --smfm-h5-lh: 28px;
+  --smfm-body:  16px; --smfm-body-lh: 1.65;
+  --smfm-lead:  18px; --smfm-lead-lh: 1.7;
+  --smfm-small: 14px; --smfm-small-lh: 1.6;
+
+  /* ---- Shape & depth ---------------------------------------------------- */
+  --smfm-radius:     12px;  /* cards, CTA, FAQ, image+text */
+  --smfm-radius-btn:  6px;
+  --smfm-shadow: 0 8px 24px rgba(40, 9, 77, 0.08);
+
+  /* ---- Spacing ---------------------------------------------------------- */
+  --smfm-gap-grid:    16px;  /* card grid gutter          */
+  --smfm-gap-inner:   32px;  /* CTA content gap           */
+  --smfm-gap-hero:    96px;  /* hero text-to-image gap    */
+  --smfm-pad-card:    32px;
+  --smfm-pad-cta:     32px 48px;
+  --smfm-pad-quote:   32px 40px;
+  --smfm-pad-section: 80px;  /* hero / band vertical pad  */
+  --smfm-wrap-max:    1600px;
+  --smfm-wrap-gutter: 80px;
+
+  /* ---- Buttons ---------------------------------------------------------- */
+  /* Faithful to the locked Drupal design: teal fill, white label.
+     ACCESSIBILITY NOTE — white on #0BAEA3 measures 2.76:1, below the WCAG AA
+     minimum of 4.5:1 for normal text (and below 3:1 for large text).
+     Swapping the line below to var(--smfm-teal-dark) gives 7.42:1 and passes
+     AAA while staying inside the existing palette. One-line change, no other
+     edits required. */
+  --smfm-btn-primary-bg:     var(--smfm-teal);
+  --smfm-btn-primary-fg:     var(--smfm-white);
+  --smfm-btn-secondary-fg:   var(--smfm-teal-dark);
+  --smfm-btn-secondary-bdr:  var(--smfm-teal-dark);
+}
+
+/* ==========================================================================
+   NARROW GLOBALS — typography only
+   ========================================================================== */
+
+/* Body font inherits sitewide. Purely typographic, no layout effect. */
+body {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-body);
+  line-height: var(--smfm-body-lh);
+  color: var(--smfm-ink);
+}
+
+/* Headings are scoped to .body-content so Novi's header, nav, footer and
+   system chrome keep their own treatment. Novi's theme sets heading color and
+   size with its own hover and anchor rules, and the Phase 1 work established
+   that the full chain is needed to hold a size — hence the :hover and a
+   states below. */
+.body-content h1, .body-content h1 a, .body-content h1 a:hover,
+.body-content h2, .body-content h2 a, .body-content h2 a:hover,
+.body-content h3, .body-content h3 a, .body-content h3 a:hover,
+.body-content h4, .body-content h4 a, .body-content h4 a:hover,
+.body-content h5, .body-content h5 a, .body-content h5 a:hover {
+  font-family: var(--smfm-font-head) !important;
+  color: var(--smfm-purple) !important;
+}
+
+.body-content h1, .body-content h1 a, .body-content h1 a:hover {
+  font-size: var(--smfm-h1) !important; line-height: var(--smfm-h1-lh) !important; font-weight: 400 !important;
+}
+.body-content h2, .body-content h2 a, .body-content h2 a:hover {
+  font-size: var(--smfm-h2) !important; line-height: var(--smfm-h2-lh) !important; font-weight: 400 !important;
+}
+.body-content h3, .body-content h3 a, .body-content h3 a:hover {
+  font-size: var(--smfm-h3) !important; line-height: var(--smfm-h3-lh) !important; font-weight: 400 !important;
+}
+.body-content h4, .body-content h4 a, .body-content h4 a:hover {
+  font-size: var(--smfm-h4) !important; line-height: var(--smfm-h4-lh) !important; font-weight: 700 !important;
+}
+.body-content h5, .body-content h5 a, .body-content h5 a:hover {
+  font-size: var(--smfm-h5) !important; line-height: var(--smfm-h5-lh) !important; font-weight: 700 !important;
+}
+
+/* Body copy inside page content. Drupal runs prose at 18px/1.7. */
+.body-content p {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-lead);
+  line-height: var(--smfm-lead-lh);
+  color: var(--smfm-ink);
+}
+
+/* ==========================================================================
+   RESPONSIVE TYPE
+   Novi's own heading shrink starts near 900px (established in Phase 1), not
+   the 600px you'd expect, so the tablet scale is pinned at 900px to land on
+   top of it rather than underneath it.
+   ========================================================================== */
+@media (max-width: 900px) {
+  :root {
+    --smfm-h1: 40px;  --smfm-h1-lh: 46px;
+    --smfm-h2: 32px;  --smfm-h2-lh: 38.4px;
+    --smfm-h3: 26px;  --smfm-h3-lh: 33.28px;
+    --smfm-lead: 17px;
+    --smfm-wrap-gutter: 24px;
+    --smfm-pad-section: 56px;
+    --smfm-gap-hero: 48px;
+    --smfm-pad-cta: 28px 28px;
+    --smfm-pad-quote: 24px 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --smfm-h1: 32px;  --smfm-h1-lh: 38px;
+    --smfm-h2: 26px;  --smfm-h2-lh: 32px;
+    --smfm-h3: 22px;  --smfm-h3-lh: 29px;
+    --smfm-h4: 20px;  --smfm-h4-lh: 28px;
+    --smfm-lead: 16px;
+    --smfm-wrap-gutter: 20px;
+    --smfm-pad-section: 40px;
+    --smfm-pad-card: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .body-content *, .body-content *::before, .body-content *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ===== smfm-blocks.css ===== */
+/* ==========================================================================
+   SMFM Novi — Custom content blocks
+   --------------------------------------------------------------------------
+   Requires smfm-tokens.css (loaded first).
+
+   NAMING: every selector is namespaced `smfm-` so nothing collides with
+   Novi's theme or its Bootstrap base. The vocabulary deliberately mirrors the
+   Drupal component system on test-smfm.pantheonsite.io so one mental model
+   covers both properties:
+
+     Drupal                        SMFM Novi
+     ---------------------------   --------------------------------
+     .component--cta               .smfm-cta
+     .cta--dark / --lavender/--mint .smfm-cta--dark / --lavender / --mint
+     .component--cards             .smfm-cards
+     .cards-columns-2/3/4          .smfm-cards--cols-2 / -3 / -4
+     .card-single                  .smfm-card
+     .component--image-and-text    .smfm-image-text
+     .it--purple / --lavender/--mint .smfm-image-text--purple / ...
+     .it--w30 / --w50 / --w60      .smfm-image-text--w30 / -w50 / -w60
+     .placement-left / -right      (default) / .smfm-image-text--flip
+     .component--faq               .smfm-faq
+     .component--quote             .smfm-quote
+     .btn--primary / --secondary   .smfm-btn--primary / --secondary
+
+   Drupal's own class names (.btn, .component, .card-single, .cta-content)
+   are too generic to reuse directly here — .btn in particular is load-bearing
+   across Novi's checkout and profile pages.
+
+   FULL-BLEED CONTRACT: any element carrying `smfm-bleed` is positioned by the
+   head-code script, which sets inline margin-left / margin-right / width.
+   Never declare margin-left, margin-right or width on those elements in this
+   file, and never override the inline values. Content re-centers via the
+   inner `.smfm-wrap`.
+   ========================================================================== */
+
+/* ---- Shared inner wrapper ------------------------------------------------ */
+.smfm-wrap {
+  box-sizing: border-box;
+  max-width: var(--smfm-wrap-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--smfm-wrap-gutter);
+  padding-right: var(--smfm-wrap-gutter);
+}
+
+/* Narrower measure for reading-width blocks (FAQ, quote, prose CTA). */
+.smfm-wrap--narrow { max-width: 1100px; }
+
+.smfm-bleed { box-sizing: border-box; }
+
+/* ---- Overline / eyebrow ------------------------------------------------- */
+.smfm-overline {
+  display: block;
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-small);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--smfm-overline-color, var(--smfm-teal-dark));
+  margin: 0 0 12px;
+}
+
+/* ==========================================================================
+   BUTTONS (block-scoped only — Novi's own .btn is left alone)
+   ========================================================================== */
+.smfm-btn {
+  display: inline-block;
+  box-sizing: border-box;
+  font-family: var(--smfm-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 12px 24px;
+  border-radius: var(--smfm-radius-btn);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.smfm-btn--primary,
+.smfm-btn--primary:link,
+.smfm-btn--primary:visited {
+  background: var(--smfm-btn-primary-bg);
+  color: var(--smfm-btn-primary-fg);
+  border-color: transparent;
+}
+.smfm-btn--primary:hover,
+.smfm-btn--primary:focus {
+  background: var(--smfm-teal-dark);
+  color: var(--smfm-white);
+}
+
+.smfm-btn--secondary,
+.smfm-btn--secondary:link,
+.smfm-btn--secondary:visited {
+  background: transparent;
+  color: var(--smfm-btn-secondary-fg);
+  border-color: var(--smfm-btn-secondary-bdr);
+}
+.smfm-btn--secondary:hover,
+.smfm-btn--secondary:focus {
+  background: var(--smfm-teal-dark);
+  color: var(--smfm-white);
+  border-color: var(--smfm-teal-dark);
+}
+
+/* On dark backgrounds the secondary pairing flips to white-on-transparent.
+   (Light and dark variants are genuinely different problems — a single
+   button style does not survive both.) */
+.smfm-on-dark .smfm-btn--secondary,
+.smfm-on-dark .smfm-btn--secondary:link,
+.smfm-on-dark .smfm-btn--secondary:visited {
+  color: var(--smfm-white);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.smfm-on-dark .smfm-btn--secondary:hover,
+.smfm-on-dark .smfm-btn--secondary:focus {
+  background: var(--smfm-white);
+  color: var(--smfm-purple);
+  border-color: var(--smfm-white);
+}
+
+.smfm-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ==========================================================================
+   1. HERO — repurposed from the Drupal homepage hero
+   Search form and "How can we improve?" link intentionally omitted.
+   ========================================================================== */
+.smfm-hero {
+  box-sizing: border-box;
+  background: var(--smfm-hero-bg, var(--smfm-purple));
+  color: var(--smfm-white);
+  padding-top: var(--smfm-pad-section);
+  padding-bottom: var(--smfm-pad-section);
+  overflow: hidden;
+}
+
+.smfm-hero .smfm-hero__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--smfm-gap-hero);
+}
+
+.smfm-hero__content {
+  flex: 1 1 0%;
+  max-width: 640px;
+  min-width: 0;
+}
+
+/* Hero headline runs its own scale, well above the h1 token. Mint on deep
+   purple measures 8.4:1, comfortably AA. */
+.smfm-hero__title,
+.body-content .smfm-hero__title {
+  font-family: var(--smfm-font-head) !important;
+  font-weight: 400 !important;
+  font-size: var(--smfm-hero-title, 80px) !important;
+  line-height: 1.05 !important;
+  color: var(--smfm-mint) !important;
+  margin: 0 0 16px !important;
+  text-align: left !important;
+}
+
+.smfm-hero__text,
+.body-content .smfm-hero__text {
+  font-family: var(--smfm-font-body);
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: var(--smfm-white) !important;
+  margin: 0 !important;
+  max-width: 52ch;
+}
+.smfm-hero__text p,
+.body-content .smfm-hero__text p {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  color: var(--smfm-white) !important;
+  margin: 0 0 16px !important;
+}
+.smfm-hero__text p:last-child,
+.body-content .smfm-hero__text p:last-child { margin-bottom: 0 !important; }
+
+/* Circular portrait, 340px at desktop. Source art should be square and at
+   least 680x680 to stay sharp on 2x displays. */
+.smfm-hero__media {
+  flex: 0 0 340px;
+  max-width: 340px;
+}
+.smfm-hero__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: clip;
+}
+
+@media (max-width: 900px) {
+  .smfm-hero { --smfm-hero-title: 56px; }
+  .smfm-hero__media { flex-basis: 260px; max-width: 260px; }
+}
+
+@media (max-width: 700px) {
+  .smfm-hero .smfm-hero__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .smfm-hero { --smfm-hero-title: 40px; }
+  .smfm-hero__content { max-width: 100%; }
+  .smfm-hero__media { flex-basis: auto; max-width: 220px; order: -1; }
+}
+
+/* ==========================================================================
+   2. CTA — variants reassign variables only
+   ========================================================================== */
+.smfm-cta {
+  box-sizing: border-box;
+  background: var(--smfm-cta-bg);
+  color: var(--smfm-cta-fg);
+  border-radius: var(--smfm-radius);
+  padding: var(--smfm-pad-cta);
+  display: flex;
+  align-items: center;
+  gap: var(--smfm-gap-inner);
+}
+
+.smfm-cta--dark {
+  --smfm-cta-bg: var(--smfm-purple-mid);
+  --smfm-cta-fg: var(--smfm-white);
+  --smfm-overline-color: var(--smfm-mint);
+}
+.smfm-cta--lavender {
+  --smfm-cta-bg: var(--smfm-lavender-tint);
+  --smfm-cta-fg: var(--smfm-ink);
+  --smfm-overline-color: var(--smfm-purple);
+}
+.smfm-cta--mint {
+  --smfm-cta-bg: var(--smfm-mint-tint);
+  --smfm-cta-fg: var(--smfm-ink);
+  --smfm-overline-color: var(--smfm-teal-dark);
+}
+.smfm-cta--compact { padding: 24px 32px; }
+
+.smfm-cta__content { flex: 1 1 auto; min-width: 0; }
+
+.smfm-cta__headline,
+.body-content .smfm-cta__headline {
+  font-family: var(--smfm-font-head) !important;
+  font-size: var(--smfm-h3) !important;
+  line-height: var(--smfm-h3-lh) !important;
+  font-weight: 400 !important;
+  color: var(--smfm-cta-fg) !important;
+  margin: 0 0 8px !important;
+}
+
+.smfm-cta__subhead,
+.body-content .smfm-cta__subhead {
+  font-family: var(--smfm-font-body);
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: var(--smfm-cta-fg) !important;
+  margin: 0 !important;
+}
+
+/* Side-by-side action column (mirrors .cta-buttons--side) */
+.smfm-cta__actions { flex: 0 0 auto; }
+.smfm-cta__actions .smfm-btn-row { margin-top: 0; }
+
+@media (max-width: 700px) {
+  .smfm-cta { flex-direction: column; align-items: flex-start; gap: 20px; }
+}
+
+/* ==========================================================================
+   3. CARDS
+   ========================================================================== */
+.smfm-cards { box-sizing: border-box; }
+
+.smfm-cards__title,
+.body-content .smfm-cards__title {
+  font-family: var(--smfm-font-head) !important;
+  font-size: var(--smfm-h2) !important;
+  line-height: var(--smfm-h2-lh) !important;
+  font-weight: 400 !important;
+  color: var(--smfm-purple) !important;
+  margin: 0 0 24px !important;
+}
+
+.smfm-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--smfm-cards-cols, 3), minmax(0, 1fr));
+  gap: var(--smfm-gap-grid);
+  align-items: stretch;
+}
+.smfm-cards--cols-2 { --smfm-cards-cols: 2; }
+.smfm-cards--cols-3 { --smfm-cards-cols: 3; }
+.smfm-cards--cols-4 { --smfm-cards-cols: 4; }
+
+/* Tinted card families (mirrors --cards-lavender / --cards-mint-green) */
+.smfm-cards--lavender { --smfm-card-bg: var(--smfm-lavender-tint); --smfm-card-bdr: #E3DAF4; }
+.smfm-cards--mint     { --smfm-card-bg: var(--smfm-mint-tint);     --smfm-card-bdr: #CBE6E4; }
+
+.smfm-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--smfm-card-bg, var(--smfm-white));
+  border: 1px solid var(--smfm-card-bdr, var(--smfm-border));
+  border-radius: var(--smfm-radius);
+  box-shadow: var(--smfm-shadow);
+  overflow: hidden;
+}
+
+.smfm-card__image { display: block; }
+/* Anchor wrapping an image renders a baseline gap unless it is blockified. */
+.smfm-card__image a { display: block; line-height: 0; padding: 0; }
+.smfm-card__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.smfm-card__body {
+  padding: var(--smfm-pad-card);
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.smfm-card__headline,
+.body-content .smfm-card__headline {
+  font-family: var(--smfm-font-head) !important;
+  font-size: var(--smfm-h3) !important;
+  line-height: var(--smfm-h3-lh) !important;
+  font-weight: 400 !important;
+  color: var(--smfm-purple) !important;
+  margin: 0 0 8px !important;
+}
+.smfm-card__headline a,
+.smfm-card__headline a:hover {
+  color: var(--smfm-purple) !important;
+  text-decoration: none;
+}
+.smfm-card__headline a:hover { text-decoration: underline; }
+
+.smfm-card__subhead,
+.body-content .smfm-card__subhead {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-small) !important;
+  line-height: var(--smfm-small-lh) !important;
+  font-weight: 600 !important;
+  color: var(--smfm-teal-dark) !important;
+  margin: 0 0 12px !important;
+}
+
+/* A bare <p> between a heading and a list inherits nothing useful, so the
+   text block is styled explicitly and padded symmetrically. */
+.smfm-card__text,
+.body-content .smfm-card__text,
+.smfm-card__text p,
+.body-content .smfm-card__text p {
+  font-family: var(--smfm-font-body);
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: var(--smfm-ink) !important;
+  margin: 0 0 12px !important;
+}
+
+.smfm-card__actions { margin-top: auto; padding-top: 12px; }
+.smfm-card__actions .smfm-btn-row { margin-top: 0; }
+
+@media (max-width: 900px) {
+  .smfm-cards--cols-3 .smfm-cards__grid,
+  .smfm-cards--cols-4 .smfm-cards__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .smfm-cards__grid,
+  .smfm-cards--cols-2 .smfm-cards__grid,
+  .smfm-cards--cols-3 .smfm-cards__grid,
+  .smfm-cards--cols-4 .smfm-cards__grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ==========================================================================
+   4. IMAGE + TEXT
+   ========================================================================== */
+.smfm-image-text {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: var(--smfm-it-bg, transparent);
+  color: var(--smfm-it-fg, var(--smfm-ink));
+  border-radius: var(--smfm-radius);
+}
+
+.smfm-image-text--purple {
+  --smfm-it-bg: var(--smfm-purple-mid);
+  --smfm-it-fg: var(--smfm-white);
+  --smfm-overline-color: var(--smfm-mint);
+}
+.smfm-image-text--lavender {
+  --smfm-it-bg: var(--smfm-lavender-tint);
+  --smfm-it-fg: var(--smfm-ink);
+  --smfm-overline-color: var(--smfm-purple);
+}
+.smfm-image-text--mint {
+  --smfm-it-bg: var(--smfm-mint-tint);
+  --smfm-it-fg: var(--smfm-ink);
+  --smfm-overline-color: var(--smfm-teal-dark);
+}
+.smfm-image-text--padded { padding: 40px; }
+.smfm-image-text--flip { flex-direction: row-reverse; }
+
+.smfm-image-text--w30 { --smfm-it-media: 30%; }
+.smfm-image-text--w50 { --smfm-it-media: 50%; }
+.smfm-image-text--w60 { --smfm-it-media: 60%; }
+
+.smfm-image-text__media {
+  flex: 0 0 var(--smfm-it-media, 40%);
+  max-width: var(--smfm-it-media, 40%);
+  min-width: 0;
+}
+.smfm-image-text__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.smfm-image-text__body { flex: 1 1 auto; min-width: 0; }
+
+.smfm-image-text__headline,
+.body-content .smfm-image-text__headline {
+  font-family: var(--smfm-font-head) !important;
+  font-size: var(--smfm-h2) !important;
+  line-height: var(--smfm-h2-lh) !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.5px !important;
+  color: var(--smfm-it-fg) !important;
+  margin: 0 0 12px !important;
+}
+
+.smfm-image-text__subhead,
+.body-content .smfm-image-text__subhead,
+.smfm-image-text__subhead p,
+.body-content .smfm-image-text__subhead p {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-lead) !important;
+  line-height: var(--smfm-lead-lh) !important;
+  color: var(--smfm-it-fg) !important;
+  margin: 0 0 12px !important;
+}
+
+/* Light-background variants need the dark ink restated on every text node,
+   not just the headline, or stray elements inherit white. */
+.smfm-image-text--lavender :where(p, li, span, strong, em, h2, h3, h4),
+.smfm-image-text--mint :where(p, li, span, strong, em, h2, h3, h4) {
+  color: var(--smfm-ink);
+}
+
+@media (max-width: 700px) {
+  .smfm-image-text,
+  .smfm-image-text--flip { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .smfm-image-text__media,
+  .smfm-image-text--w30 .smfm-image-text__media,
+  .smfm-image-text--w50 .smfm-image-text__media,
+  .smfm-image-text--w60 .smfm-image-text__media { flex-basis: auto; max-width: 100%; width: 100%; }
+  .smfm-image-text--padded { padding: 24px; }
+}
+
+/* ==========================================================================
+   5. FAQ  (progressive disclosure via <details>/<summary> — no JS required,
+   so nothing to lose when Novi strips <script> from pasted content)
+   ========================================================================== */
+.smfm-faq { box-sizing: border-box; }
+
+.smfm-faq__title,
+.body-content .smfm-faq__title {
+  font-family: var(--smfm-font-head) !important;
+  font-size: var(--smfm-h2) !important;
+  line-height: var(--smfm-h2-lh) !important;
+  font-weight: 400 !important;
+  color: var(--smfm-purple) !important;
+  margin: 0 0 24px !important;
+}
+
+.smfm-faq__list { display: flex; flex-direction: column; gap: 12px; }
+
+.smfm-faq__item {
+  background: var(--smfm-white);
+  border: 1px solid var(--smfm-border);
+  border-radius: var(--smfm-radius);
+  overflow: hidden;
+}
+
+.smfm-faq__question {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 32px;
+  font-family: var(--smfm-font-head);
+  font-size: var(--smfm-h4);
+  line-height: var(--smfm-h4-lh);
+  font-weight: 700;
+  color: var(--smfm-purple);
+  cursor: pointer;
+  list-style: none;
+}
+.smfm-faq__question::-webkit-details-marker { display: none; }
+.smfm-faq__question::marker { content: ''; }
+
+/* Chevron drawn in CSS so there is no icon dependency. */
+.smfm-faq__question::after {
+  content: '';
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  border-right: 2px solid var(--smfm-teal-dark);
+  border-bottom: 2px solid var(--smfm-teal-dark);
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.smfm-faq__item[open] .smfm-faq__question::after { transform: rotate(-135deg); }
+
+.smfm-faq__answer,
+.body-content .smfm-faq__answer,
+.smfm-faq__answer p,
+.body-content .smfm-faq__answer p {
+  font-family: var(--smfm-font-body);
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  color: var(--smfm-ink) !important;
+}
+.smfm-faq__answer { padding: 0 32px 24px; }
+.smfm-faq__answer p { margin: 0 0 12px !important; }
+.smfm-faq__answer p:last-child { margin-bottom: 0 !important; }
+
+@media (max-width: 600px) {
+  .smfm-faq__question { padding: 18px 20px; gap: 16px; }
+  .smfm-faq__answer { padding: 0 20px 18px; }
+}
+
+/* ==========================================================================
+   6. QUOTE
+   ========================================================================== */
+.smfm-quote {
+  box-sizing: border-box;
+  background: var(--smfm-gray-bg);
+  border-left: 8px solid var(--smfm-teal);
+  padding: var(--smfm-pad-quote);
+  margin: 0;
+}
+
+.smfm-quote__text,
+.body-content .smfm-quote__text,
+.smfm-quote__text p,
+.body-content .smfm-quote__text p {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-lead) !important;
+  line-height: 1.6 !important;
+  font-weight: 400 !important;
+  color: var(--smfm-ink) !important;
+  margin: 0 0 12px !important;
+}
+
+.smfm-quote__attribution,
+.body-content .smfm-quote__attribution {
+  font-family: var(--smfm-font-body);
+  font-size: var(--smfm-small) !important;
+  line-height: var(--smfm-small-lh) !important;
+  color: var(--smfm-ink-muted) !important;
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   7. SECTION BAND — optional tinted or photo background wrapper
+   Pass the photo per instance, not in the class:
+     <section class="smfm-band smfm-band--photo smfm-bleed"
+              style="--smfm-band-photo:url('https://assets.noviams.com/...')">
+   Unset, it falls back to flat color rather than a broken image.
+   ========================================================================== */
+.smfm-band {
+  box-sizing: border-box;
+  background: var(--smfm-band-bg, var(--smfm-gray-bg));
+  color: var(--smfm-band-fg, var(--smfm-ink));
+  padding-top: var(--smfm-pad-section);
+  padding-bottom: var(--smfm-pad-section);
+}
+.smfm-band--lavender { --smfm-band-bg: var(--smfm-lavender-tint); }
+.smfm-band--mint     { --smfm-band-bg: var(--smfm-mint-tint); }
+.smfm-band--purple {
+  --smfm-band-bg: var(--smfm-purple);
+  --smfm-band-fg: var(--smfm-white);
+  --smfm-overline-color: var(--smfm-mint);
+}
+.smfm-band--photo {
+  background:
+    linear-gradient(rgba(40, 9, 77, 0.78), rgba(40, 9, 77, 0.78)),
+    var(--smfm-band-photo, none) center / cover no-repeat,
+    var(--smfm-purple);
+  color: var(--smfm-white);
+  --smfm-overline-color: var(--smfm-mint);
+}
+/* Dark-surface text handling lives in section 9 below, because it has to
+   out-specify the !important heading globals in smfm-tokens.css. */
+
+/* ==========================================================================
+   8. UTILITIES — added by hand per page, deliberately not clever selectors
+   ========================================================================== */
+.smfm-flush-top { margin-top: 0 !important; }
+.smfm-pad-bottom { padding-bottom: var(--smfm-pad-section); }
+.smfm-stack-gap > * + * { margin-top: var(--smfm-pad-section); }
+
+/* ==========================================================================
+   9. DARK SURFACES — must come last
+   --------------------------------------------------------------------------
+   Light and dark backgrounds are genuinely different problems. A block's own
+   component classes (.smfm-cta__headline and friends) already carry the right
+   colour, but a bare <h2>, <p> or <li> pasted into a dark block inherits
+   nothing useful and lands purple-on-purple.
+
+   Two traps this section exists to avoid, both found in the preview harness:
+
+   1. The heading globals in smfm-tokens.css are !important, so a dark-surface
+      rule written with :where() (zero specificity) or a plain descendant
+      selector loses and the heading stays purple on a purple band. These
+      rules therefore carry !important AND repeat the .body-content chain.
+
+   2. Raising specificity far enough to beat those globals is also enough to
+      beat .smfm-hero__title, which is deliberately mint rather than white.
+      The :not() exclusion below keeps the hero headline out of it. Any future
+      heading that wants a non-white colour on a dark surface needs the same
+      treatment.
+   ========================================================================== */
+
+.smfm-on-dark h1:not(.smfm-hero__title),
+.smfm-on-dark h2, .smfm-on-dark h3, .smfm-on-dark h4, .smfm-on-dark h5,
+.smfm-cta--dark h2, .smfm-cta--dark h3, .smfm-cta--dark h4,
+.smfm-image-text--purple h2, .smfm-image-text--purple h3, .smfm-image-text--purple h4,
+.smfm-band--purple h2, .smfm-band--purple h3, .smfm-band--purple h4,
+.smfm-band--photo h2, .smfm-band--photo h3, .smfm-band--photo h4,
+.body-content .smfm-on-dark h1:not(.smfm-hero__title),
+.body-content .smfm-on-dark h2, .body-content .smfm-on-dark h3,
+.body-content .smfm-on-dark h4, .body-content .smfm-on-dark h5,
+.body-content .smfm-cta--dark h2, .body-content .smfm-cta--dark h3, .body-content .smfm-cta--dark h4,
+.body-content .smfm-image-text--purple h2, .body-content .smfm-image-text--purple h3,
+.body-content .smfm-band--purple h2, .body-content .smfm-band--purple h3, .body-content .smfm-band--purple h4,
+.body-content .smfm-band--photo h2, .body-content .smfm-band--photo h3, .body-content .smfm-band--photo h4 {
+  color: var(--smfm-white) !important;
+}
+
+.smfm-on-dark p, .smfm-on-dark li, .smfm-on-dark strong, .smfm-on-dark em,
+.smfm-cta--dark p, .smfm-cta--dark li,
+.smfm-image-text--purple p, .smfm-image-text--purple li,
+.smfm-band--purple p, .smfm-band--purple li,
+.smfm-band--photo p, .smfm-band--photo li,
+.body-content .smfm-on-dark p, .body-content .smfm-on-dark li,
+.body-content .smfm-cta--dark p, .body-content .smfm-cta--dark li,
+.body-content .smfm-image-text--purple p, .body-content .smfm-image-text--purple li,
+.body-content .smfm-band--purple p, .body-content .smfm-band--purple li,
+.body-content .smfm-band--photo p, .body-content .smfm-band--photo li {
+  color: var(--smfm-white) !important;
+}
+
+/* Inline code inside dark prose stays legible. */
+.smfm-on-dark code, .smfm-band--photo code, .smfm-band--purple code {
+  color: var(--smfm-mint) !important;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+/* The overline keeps its accent colour. Both chains are needed so this wins
+   against the .body-content rules above. */
+.smfm-on-dark .smfm-overline,
+.smfm-cta--dark .smfm-overline,
+.smfm-image-text--purple .smfm-overline,
+.smfm-band--purple .smfm-overline,
+.smfm-band--photo .smfm-overline,
+.body-content .smfm-on-dark .smfm-overline,
+.body-content .smfm-cta--dark .smfm-overline,
+.body-content .smfm-image-text--purple .smfm-overline,
+.body-content .smfm-band--purple .smfm-overline,
+.body-content .smfm-band--photo .smfm-overline {
+  color: var(--smfm-overline-color, var(--smfm-mint)) !important;
+}
+
+/* Buttons keep their own label colours. */
+.smfm-on-dark .smfm-btn--primary,
+.body-content .smfm-on-dark .smfm-btn--primary {
+  color: var(--smfm-btn-primary-fg) !important;
+}
+.smfm-on-dark .smfm-btn--secondary:hover,
+.body-content .smfm-on-dark .smfm-btn--secondary:hover {
+  color: var(--smfm-purple) !important;
+}
+
+</style>
+
+<style>
+  /* Preview chrome only. None of this ships to Novi. */
+  .pv-note {
+    background: #FFF8E1; border: 1px solid #F0D98C; border-radius: 8px;
+    padding: 16px 20px; margin: 0 0 24px;
+    font: 400 14px/1.6 'Poppins', sans-serif; color: #5A4A1A;
+  }
+  .pv-note strong { font-weight: 600; }
+  .pv-bar {
+    box-sizing: border-box; background: #28094D; color: #fff;
+    font: 600 13px/1.4 'Poppins', -apple-system, 'Segoe UI', sans-serif;
+    letter-spacing: .04em; text-transform: uppercase;
+    padding: 14px 20px; margin: 48px 0 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .pv-bar:first-of-type { margin-top: 0; }
+  .pv-bar code {
+    font: 500 11px/1 ui-monospace, Menlo, monospace; text-transform: none;
+    letter-spacing: 0; opacity: .75; margin-left: 8px;
+  }
+  .smfm-copy-btn {
+    box-sizing: border-box; flex: 0 0 auto; background: #fff; color: #28094D;
+    border: none; border-radius: 6px; padding: 6px 14px;
+    font: 700 12px/1 'Poppins', sans-serif; letter-spacing: .02em;
+    text-transform: none; cursor: pointer;
+  }
+  .pv-mode {
+    position: sticky; top: 0; z-index: 50; background: #0BAEA3; color: #fff;
+    padding: 10px 20px; font: 600 13px/1.4 'Poppins', sans-serif;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .pv-mode button {
+    background: rgba(255,255,255,.18); color: #fff; border: 1px solid rgba(255,255,255,.5);
+    border-radius: 6px; padding: 5px 12px; font: 600 12px/1 'Poppins', sans-serif; cursor: pointer;
+  }
+  .pv-mode button[aria-pressed="true"] { background: #fff; color: #06605A; }
+  .pv-fakehead {
+    background: #28094D; color: #fff; padding: 18px 24px;
+    font: 600 15px/1 'Poppins', sans-serif;
+  }
+  /* Interior-template simulation. Mirrors the inset measured on
+     smfm.novistaging.com/membership-information. */
+  body.pv-interior .pv-stage { padding-left: 30px; padding-right: 30px; }
+</style>
+</head>
+<body>
+
+<div class="pv-mode">
+  <span>Template simulation:</span>
+  <button type="button" id="pvHome" aria-pressed="true">Homepage (full-width content)</button>
+  <button type="button" id="pvInt" aria-pressed="false">Interior page (inset ~30px)</button>
+  <span style="opacity:.85;font-weight:400">Full-bleed sections should still reach both edges in either mode.</span>
+</div>
+
+<div class="pv-fakehead">SMFM &mdash; simulated Novi header</div>
+
+<!-- Replicates Novi's real wrapper chain so the full-bleed script has
+     something genuine to correct. -->
+<div class="body-content c-body-content__preview">
+  <div class="section single-region">
+    <div class="pv-stage">
+
+      <div class="pv-note">
+        <strong>What this is.</strong> A preview harness, not the finished site. It loads Novi's live staging theme CSS plus the two proposed stylesheets, in the real load order, inside a replica of Novi's wrapper nesting. Use the toggle above to check that full-bleed sections behave on both the homepage template and interior templates. <strong>This file loads Novi’s live staging theme CSS</strong>, so cascade conflicts with the real theme show up here. <strong>Known gaps:</strong> Novi's logged-in system pages could not be inspected without a member login, so nothing here proves how these styles land on checkout, profile or event registration. Button fill is the Drupal teal, which measures 2.76:1 against white and fails WCAG AA &mdash; see the note in <code>smfm-tokens.css</code> for the one-line swap to 7.42:1.
+      </div>
+
+      <!-- ============================ HERO ============================ -->
+      <div class="pv-bar"><span>Hero <code>.smfm-hero</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="1">Copy Code</button></div>
+      <section class="smfm-hero smfm-bleed smfm-on-dark" data-smfm-block="1">
+        <div class="smfm-wrap smfm-hero__inner">
+          <div class="smfm-hero__content">
+            <span class="smfm-overline">Member Portal</span>
+            <h1 class="smfm-hero__title">Your SMFM Member Portal</h1>
+            <div class="smfm-hero__text">
+              <p>Manage your membership, register for meetings, access clinical guidance, and connect with the maternal-fetal medicine community.</p>
+            </div>
+            <div class="smfm-btn-row">
+              <a class="smfm-btn smfm-btn--primary" href="#">Go to My Compass</a>
+              <a class="smfm-btn smfm-btn--secondary" href="#">Manage Membership</a>
+            </div>
+          </div>
+          <div class="smfm-hero__media">
+            <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 480 480'%3E%3Crect width='480' height='480' fill='%2380C8C3'/%3E%3C/svg%3E" alt="">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================ CTA ============================= -->
+      <div class="pv-bar"><span>CTA &mdash; dark <code>.smfm-cta--dark</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="2">Copy Code</button></div>
+      <section class="smfm-cta smfm-cta--dark smfm-on-dark" data-smfm-block="2">
+        <div class="smfm-cta__content">
+          <span class="smfm-overline">Renew for 2027</span>
+          <h2 class="smfm-cta__headline">Your membership expires in 30 days</h2>
+          <p class="smfm-cta__subhead">Renew now to keep uninterrupted access to clinical guidance and member meeting rates.</p>
+        </div>
+        <div class="smfm-cta__actions">
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Renew Now</a></div>
+        </div>
+      </section>
+
+      <div class="pv-bar"><span>CTA &mdash; lavender <code>.smfm-cta--lavender</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="3">Copy Code</button></div>
+      <section class="smfm-cta smfm-cta--lavender" data-smfm-block="3">
+        <div class="smfm-cta__content">
+          <span class="smfm-overline">Pregnancy Meeting</span>
+          <h2 class="smfm-cta__headline">Registration is open</h2>
+          <p class="smfm-cta__subhead">Member rates apply automatically when you are signed in.</p>
+        </div>
+        <div class="smfm-cta__actions">
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Register</a></div>
+        </div>
+      </section>
+
+      <div class="pv-bar"><span>CTA &mdash; mint, compact <code>.smfm-cta--mint.smfm-cta--compact</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="4">Copy Code</button></div>
+      <section class="smfm-cta smfm-cta--mint smfm-cta--compact" data-smfm-block="4">
+        <div class="smfm-cta__content">
+          <h2 class="smfm-cta__headline">Update your practice profile</h2>
+          <p class="smfm-cta__subhead">Keeps the member directory accurate for referrals.</p>
+        </div>
+        <div class="smfm-cta__actions">
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Edit Profile</a></div>
+        </div>
+      </section>
+
+      <!-- =========================== CARDS ============================ -->
+      <div class="pv-bar"><span>Cards &mdash; 3 column <code>.smfm-cards--cols-3</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="5">Copy Code</button></div>
+      <section class="smfm-cards smfm-cards--cols-3" data-smfm-block="5">
+        <h2 class="smfm-cards__title">Member resources</h2>
+        <div class="smfm-cards__grid">
+          <article class="smfm-card">
+            <div class="smfm-card__image"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400'%3E%3Crect width='640' height='400' fill='%23F1ECFA'/%3E%3C/svg%3E" alt=""></div>
+            <div class="smfm-card__body">
+              <h3 class="smfm-card__headline"><a href="#">Clinical Guidance Library</a></h3>
+              <p class="smfm-card__subhead">Consult Series</p>
+              <div class="smfm-card__text"><p>Evidence-based statements and consult series for maternal-fetal medicine specialists.</p></div>
+              <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Browse</a></div></div>
+            </div>
+          </article>
+          <article class="smfm-card">
+            <div class="smfm-card__image"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400'%3E%3Crect width='640' height='400' fill='%23E2F1F0'/%3E%3C/svg%3E" alt=""></div>
+            <div class="smfm-card__body">
+              <h3 class="smfm-card__headline"><a href="#">The Pregnancy Meeting</a></h3>
+              <p class="smfm-card__subhead">Annual Meeting</p>
+              <div class="smfm-card__text"><p>Abstracts, programming and registration for the annual scientific meeting.</p></div>
+              <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Details</a></div></div>
+            </div>
+          </article>
+          <article class="smfm-card">
+            <div class="smfm-card__image"><img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 400'%3E%3Crect width='640' height='400' fill='%23F2F4F8'/%3E%3C/svg%3E" alt=""></div>
+            <div class="smfm-card__body">
+              <h3 class="smfm-card__headline"><a href="#">Advocacy Toolkit</a></h3>
+              <p class="smfm-card__subhead">Health Policy</p>
+              <div class="smfm-card__text"><p>Resources for engaging policymakers on maternal health priorities.</p></div>
+              <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--secondary" href="#">Open</a></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="pv-bar"><span>Cards &mdash; 2 column, mint family <code>.smfm-cards--cols-2.smfm-cards--mint</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="6">Copy Code</button></div>
+      <section class="smfm-cards smfm-cards--cols-2 smfm-cards--mint" data-smfm-block="6">
+        <div class="smfm-cards__grid">
+          <article class="smfm-card">
+            <div class="smfm-card__body">
+              <h3 class="smfm-card__headline">Dues &amp; Invoices</h3>
+              <div class="smfm-card__text"><p>View open invoices, download receipts and update your payment method.</p></div>
+              <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">View Invoices</a></div></div>
+            </div>
+          </article>
+          <article class="smfm-card">
+            <div class="smfm-card__body">
+              <h3 class="smfm-card__headline">Committee Service</h3>
+              <div class="smfm-card__text"><p>See your current appointments and apply for open committee seats.</p></div>
+              <div class="smfm-card__actions"><div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">My Committees</a></div></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ======================= IMAGE + TEXT ========================= -->
+      <div class="pv-bar"><span>Image + Text &mdash; purple, 40/60 <code>.smfm-image-text--purple</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="7">Copy Code</button></div>
+      <section class="smfm-image-text smfm-image-text--purple smfm-image-text--padded smfm-on-dark" data-smfm-block="7">
+        <div class="smfm-image-text__media">
+          <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 450'%3E%3Crect width='600' height='450' fill='%2380C8C3'/%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="smfm-image-text__body">
+          <span class="smfm-overline">Fellows &amp; Trainees</span>
+          <h2 class="smfm-image-text__headline">Built for the next generation of MFM</h2>
+          <div class="smfm-image-text__subhead"><p>Reduced dues, mentorship matching and trainee-only programming at the annual meeting.</p></div>
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Explore Benefits</a></div>
+        </div>
+      </section>
+
+      <div class="pv-bar"><span>Image + Text &mdash; lavender, flipped, 30% media <code>--lavender --flip --w30</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="8">Copy Code</button></div>
+      <section class="smfm-image-text smfm-image-text--lavender smfm-image-text--flip smfm-image-text--w30 smfm-image-text--padded" data-smfm-block="8">
+        <div class="smfm-image-text__media">
+          <img src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Crect width='600' height='600' fill='%2328094D'/%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="smfm-image-text__body">
+          <span class="smfm-overline">SMFM Foundation</span>
+          <h2 class="smfm-image-text__headline">Support research that changes outcomes</h2>
+          <div class="smfm-image-text__subhead"><p>Foundation grants fund investigators working on the hardest problems in high-risk pregnancy.</p></div>
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Give Now</a><a class="smfm-btn smfm-btn--secondary" href="#">See Grantees</a></div>
+        </div>
+      </section>
+
+      <!-- ============================ FAQ ============================= -->
+      <div class="pv-bar"><span>FAQ <code>.smfm-faq</code> &mdash; native details/summary, no JS</span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="9">Copy Code</button></div>
+      <section class="smfm-faq" data-smfm-block="9">
+        <h2 class="smfm-faq__title">Membership questions</h2>
+        <div class="smfm-faq__list">
+          <details class="smfm-faq__item" open>
+            <summary class="smfm-faq__question">When do dues renew?</summary>
+            <div class="smfm-faq__answer"><p>Membership runs on a calendar year. Renewal notices go out in November and access continues uninterrupted if you renew before January 31.</p></div>
+          </details>
+          <details class="smfm-faq__item">
+            <summary class="smfm-faq__question">Can I transfer my meeting registration?</summary>
+            <div class="smfm-faq__answer"><p>Registrations are transferable to another member up to two weeks before the meeting. Contact the membership team to process the change.</p></div>
+          </details>
+          <details class="smfm-faq__item">
+            <summary class="smfm-faq__question">How do I update my practice information?</summary>
+            <div class="smfm-faq__answer"><p>Edit your profile from the member portal. Directory listings refresh within one business day.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- =========================== QUOTE ============================ -->
+      <div class="pv-bar"><span>Quote <code>.smfm-quote</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="10">Copy Code</button></div>
+      <blockquote class="smfm-quote" data-smfm-block="10">
+        <div class="smfm-quote__text"><p>Placeholder pull quote. Replace with a real member or leadership quote before this goes anywhere near a live page.</p></div>
+        <p class="smfm-quote__attribution">Name, MD &mdash; Role, Institution</p>
+      </blockquote>
+
+      <!-- ======================== SECTION BAND ======================== -->
+      <div class="pv-bar"><span>Band &mdash; photo background <code>.smfm-band--photo</code></span>
+        <button type="button" class="smfm-copy-btn" data-smfm-copy="11">Copy Code</button></div>
+      <section class="smfm-band smfm-band--photo smfm-bleed smfm-on-dark" data-smfm-block="11"
+               style="--smfm-band-photo:url('data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1600 600%22%3E%3Crect width=%221600%22 height=%22600%22 fill=%22%230BAEA3%22/%3E%3C/svg%3E')">
+        <div class="smfm-wrap">
+          <span class="smfm-overline">Why it matters</span>
+          <h2>One in ten pregnancies is high risk</h2>
+          <p>Pass the photo per instance via the inline <code>--smfm-band-photo</code> custom property. If it is unset, the band falls back to flat purple rather than a broken image.</p>
+          <div class="smfm-btn-row"><a class="smfm-btn smfm-btn--primary" href="#">Learn More</a></div>
+        </div>
+      </section>
+
+      <div style="height:80px"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Full-bleed script — identical logic to the Novi head-code version. */
+(function(){
+  var SELECTOR = '.smfm-bleed, .smfm-hero, .smfm-band';
+  function fix(){
+    var vw = document.documentElement.clientWidth;
+    var sections = document.querySelectorAll(SELECTOR);
+    for (var i = 0; i < sections.length; i++){
+      var el = sections[i];
+      el.style.marginLeft = ''; el.style.marginRight = ''; el.style.width = '';
+      el.style.left = 'auto'; el.style.transform = 'none';
+      var rect = el.getBoundingClientRect();
+      el.style.marginLeft = (-rect.left) + 'px';
+      el.style.marginRight = '0';
+      el.style.width = vw + 'px';
+    }
+  }
+  function debounce(fn, wait){ var t; return function(){ clearTimeout(t); t = setTimeout(fn, wait); }; }
+  window.__smfmFix = fix;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fix); else fix();
+  window.addEventListener('load', fix);
+  window.addEventListener('resize', debounce(fix, 150));
+})();
+
+/* Copy-code handler — on Novi this lives in head code, not on the page. */
+(function(){
+  function copyText(str, done){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(str).then(function(){ done(true); }, function(){ legacy(); });
+    } else { legacy(); }
+    function legacy(){
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = str; ta.style.cssText = 'position:fixed;opacity:0;';
+        document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta); done(ok);
+      } catch (e) { done(false); }
+    }
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.smfm-copy-btn') : null;
+    if (!btn) return;
+    var id = btn.getAttribute('data-smfm-copy');
+    var block = document.querySelector('[data-smfm-block="' + id + '"]');
+    var original = btn.textContent;
+    if (!block) { btn.textContent = 'Copy failed'; setTimeout(function(){ btn.textContent = original; }, 1500); return; }
+    var html = block.outerHTML.replace(/\s*data-smfm-block="[^"]*"/, '');
+    copyText(html, function(ok){
+      btn.textContent = ok ? 'Copied!' : 'Copy failed';
+      setTimeout(function(){ btn.textContent = original; }, 1500);
+    });
+  });
+})();
+
+/* Template-simulation toggle. */
+(function(){
+  var home = document.getElementById('pvHome'), intr = document.getElementById('pvInt');
+  function set(interior){
+    document.body.classList.toggle('pv-interior', interior);
+    home.setAttribute('aria-pressed', String(!interior));
+    intr.setAttribute('aria-pressed', String(interior));
+    if (window.__smfmFix) window.__smfmFix();
+  }
+  home.addEventListener('click', function(){ set(false); });
+  intr.addEventListener('click', function(){ set(true); });
+})();
+</script>
+</body>
+</html>
