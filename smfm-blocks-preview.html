@@ -409,31 +409,47 @@ body {
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
+/* Every colour declaration below carries !important and repeats the
+   .body-content chain. Novi's theme forces its own link colour inside page
+   content and beats a plain .smfm-btn--secondary rule on specificity — on
+   staging that rendered secondary buttons as white-on-white, i.e. invisible
+   labels inside otherwise correct buttons. The variables resolved fine; the
+   declaration simply lost. Do not strip the !important here. */
 .smfm-btn--primary,
 .smfm-btn--primary:link,
-.smfm-btn--primary:visited {
-  background: var(--smfm-btn-primary-bg);
-  color: var(--smfm-btn-primary-fg);
-  border-color: transparent;
+.smfm-btn--primary:visited,
+.body-content .smfm-btn--primary,
+.body-content .smfm-btn--primary:link,
+.body-content .smfm-btn--primary:visited {
+  background: var(--smfm-btn-primary-bg) !important;
+  color: var(--smfm-btn-primary-fg) !important;
+  border-color: transparent !important;
 }
 .smfm-btn--primary:hover,
-.smfm-btn--primary:focus {
-  background: var(--smfm-teal-dark);
-  color: var(--smfm-white);
+.smfm-btn--primary:focus,
+.body-content .smfm-btn--primary:hover,
+.body-content .smfm-btn--primary:focus {
+  background: var(--smfm-teal-dark) !important;
+  color: var(--smfm-white) !important;
 }
 
 .smfm-btn--secondary,
 .smfm-btn--secondary:link,
-.smfm-btn--secondary:visited {
-  background: transparent;
-  color: var(--smfm-btn-secondary-fg);
-  border-color: var(--smfm-btn-secondary-bdr);
+.smfm-btn--secondary:visited,
+.body-content .smfm-btn--secondary,
+.body-content .smfm-btn--secondary:link,
+.body-content .smfm-btn--secondary:visited {
+  background: transparent !important;
+  color: var(--smfm-btn-secondary-fg) !important;
+  border-color: var(--smfm-btn-secondary-bdr) !important;
 }
 .smfm-btn--secondary:hover,
-.smfm-btn--secondary:focus {
-  background: var(--smfm-teal-dark);
-  color: var(--smfm-white);
-  border-color: var(--smfm-teal-dark);
+.smfm-btn--secondary:focus,
+.body-content .smfm-btn--secondary:hover,
+.body-content .smfm-btn--secondary:focus {
+  background: var(--smfm-teal-dark) !important;
+  color: var(--smfm-white) !important;
+  border-color: var(--smfm-teal-dark) !important;
 }
 
 /* On dark backgrounds the secondary pairing flips to white-on-transparent.
@@ -441,15 +457,20 @@ body {
    button style does not survive both.) */
 .smfm-on-dark .smfm-btn--secondary,
 .smfm-on-dark .smfm-btn--secondary:link,
-.smfm-on-dark .smfm-btn--secondary:visited {
-  color: var(--smfm-white);
-  border-color: rgba(255, 255, 255, 0.6);
+.smfm-on-dark .smfm-btn--secondary:visited,
+.body-content .smfm-on-dark .smfm-btn--secondary,
+.body-content .smfm-on-dark .smfm-btn--secondary:link,
+.body-content .smfm-on-dark .smfm-btn--secondary:visited {
+  color: var(--smfm-white) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
 }
 .smfm-on-dark .smfm-btn--secondary:hover,
-.smfm-on-dark .smfm-btn--secondary:focus {
-  background: var(--smfm-white);
-  color: var(--smfm-purple);
-  border-color: var(--smfm-white);
+.smfm-on-dark .smfm-btn--secondary:focus,
+.body-content .smfm-on-dark .smfm-btn--secondary:hover,
+.body-content .smfm-on-dark .smfm-btn--secondary:focus {
+  background: var(--smfm-white) !important;
+  color: var(--smfm-purple) !important;
+  border-color: var(--smfm-white) !important;
 }
 
 .smfm-btn-row {
