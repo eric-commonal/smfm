@@ -94,14 +94,34 @@ body {
    system chrome keep their own treatment. Novi's theme sets heading color and
    size with its own hover and anchor rules, and the Phase 1 work established
    that the full chain is needed to hold a size — hence the :hover and a
-   states below. */
+   states below.
+
+   NOTE — font and size only, deliberately NOT colour.
+   An earlier version of this file also set `color: var(--smfm-purple)
+   !important` here. On staging that repainted the heading inside Novi's stock
+   `.widget` panel, which has a dark navy background (#084061) and whose
+   heading Novi correctly sets to white: contrast fell to 1.55:1 and the text
+   became unreadable.
+
+   Dropping !important is not a fix — tested on staging, Novi's own heading
+   selectors are more specific than these, so without it the colour override
+   loses everywhere and nothing changes at all. It is all or nothing.
+
+   Enumerating Novi's dark containers is not a fix either. The ones found so
+   far (.widget, .background, .content) are generic stock classes that will
+   recur on the logged-in pages nobody has been able to inspect, so any
+   exclusion list would be quietly incomplete exactly where it matters.
+
+   So the global override carries the font, which is the visible brand change
+   and is safe on any background, and leaves colour to Novi. Custom blocks set
+   their own heading colours explicitly in smfm-blocks.css and are unaffected.
+   To opt a page in, see "Opt-in heading colour" below. */
 .body-content h1, .body-content h1 a, .body-content h1 a:hover,
 .body-content h2, .body-content h2 a, .body-content h2 a:hover,
 .body-content h3, .body-content h3 a, .body-content h3 a:hover,
 .body-content h4, .body-content h4 a, .body-content h4 a:hover,
 .body-content h5, .body-content h5 a, .body-content h5 a:hover {
   font-family: var(--smfm-font-head) !important;
-  color: var(--smfm-purple) !important;
 }
 
 .body-content h1, .body-content h1 a, .body-content h1 a:hover {
@@ -118,6 +138,30 @@ body {
 }
 .body-content h5, .body-content h5 a, .body-content h5 a:hover {
   font-size: var(--smfm-h5) !important; line-height: var(--smfm-h5-lh) !important; font-weight: 700 !important;
+}
+
+/* ---- Opt-in heading colour ---------------------------------------------
+   Two ways to put SMFM purple on stock Novi headings, once you have eyeballed
+   the page and know it has no dark panels:
+
+   1. Per page, by slug. Verify the real class in view-source first; the
+      slug-to-class conversion has surprised this project before. Append to
+      the list:
+
+        .c-body-content__style-review h2,
+        .c-body-content__some-other-page h2 { color: var(--smfm-purple) !important; }
+
+   2. Per region, by adding class="smfm-ink-headings" to a wrapper in the
+      page content editor.
+
+   Neither is applied anywhere by default. Check any page you opt in for dark
+   panels first — that is the failure this split exists to prevent. */
+.smfm-ink-headings h1, .smfm-ink-headings h1 a, .smfm-ink-headings h1 a:hover,
+.smfm-ink-headings h2, .smfm-ink-headings h2 a, .smfm-ink-headings h2 a:hover,
+.smfm-ink-headings h3, .smfm-ink-headings h3 a, .smfm-ink-headings h3 a:hover,
+.smfm-ink-headings h4, .smfm-ink-headings h4 a, .smfm-ink-headings h4 a:hover,
+.smfm-ink-headings h5, .smfm-ink-headings h5 a, .smfm-ink-headings h5 a:hover {
+  color: var(--smfm-purple) !important;
 }
 
 /* Body copy inside page content. Drupal runs prose at 18px/1.7. */

@@ -63,6 +63,13 @@ mental model covers both properties. The mapping table is at the top of
 - **The global heading rules in `smfm-tokens.css` are `!important`.** Any
   dark-surface text override has to out-specify them *and* explicitly exempt
   anything that is not white. See section 9 of `smfm-blocks.css`.
+- **Do not add a global heading `color` override.** It was tried and reverted.
+  Novi has stock components with dark backgrounds (`.widget` and friends) whose
+  headings Novi correctly sets to white; an `!important` colour override
+  repaints those to purple and drops contrast to 1.55:1. Dropping `!important`
+  doesn't help — Novi's heading selectors are more specific, so the override
+  then loses everywhere. Use the per-page or `.smfm-ink-headings` opt-in
+  instead, and check the page for dark panels before opting in.
 - **Per-page CSS** is available through the body class derived from the page
   slug (`.c-body-content__<slug>`). Verify the real class in view-source first.
 
