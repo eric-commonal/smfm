@@ -73,11 +73,30 @@ mental model covers both properties. The mapping table is at the top of
 - **Per-page CSS** is available through the body class derived from the page
   slug (`.c-body-content__<slug>`). Verify the real class in view-source first.
 
+## Buttons
+
+`smfm-tokens.css` restyles Novi's own `.btn-primary` and `.btn-secondary`
+sitewide, including on checkout, registration, profile and login. This is the
+one deliberate exception to the typography-only rule for global overrides.
+
+The mapping follows how Novi *uses* those classes rather than what they are
+named: Novi puts `.btn-secondary` on primary conversion actions such as "Join
+as Regular (MFM)", so `.btn-secondary` becomes the accent-fill button and
+`.btn-primary` becomes the dark-fill one. Both keep their existing weight
+relationship.
+
+`.search-go` and `.log-out-btn` are excluded from the geometry changes —
+they are a search icon and profile-menu rows, and button padding collapses
+them. They still take the new colours.
+
+Button colours for both Novi's `.btn` and the custom `.smfm-btn` come from the
+same tokens, so the two systems cannot drift.
+
 ## Known open items
 
-- Button fill is the Drupal teal `#0BAEA3`. White on it measures 2.76:1 and
-  fails WCAG AA. `--smfm-teal-dark` (`#06605A`) gives 7.42:1. One-line swap in
-  `smfm-tokens.css`, currently not taken.
+- Button label is purple on teal (6.14:1), not Drupal's white on teal (2.76:1).
+  Change `--smfm-btn-primary-fg` to `var(--smfm-white)` for Drupal-exact; both
+  button systems follow, and contrast drops below AA sitewide.
 - Novi's logged-in system pages (checkout, profile, event registration, member
   compass) have not been inspected. Global overrides are kept to typography
   partly for that reason.

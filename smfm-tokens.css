@@ -65,17 +65,31 @@
   --smfm-wrap-max:    1600px;
   --smfm-wrap-gutter: 80px;
 
-  /* ---- Buttons ---------------------------------------------------------- */
-  /* Faithful to the locked Drupal design: teal fill, white label.
-     ACCESSIBILITY NOTE — white on #0BAEA3 measures 2.76:1, below the WCAG AA
-     minimum of 4.5:1 for normal text (and below 3:1 for large text).
-     Swapping the line below to var(--smfm-teal-dark) gives 7.42:1 and passes
-     AAA while staying inside the existing palette. One-line change, no other
-     edits required. */
+  /* ---- Buttons ----------------------------------------------------------
+     These tokens drive BOTH the custom .smfm-btn blocks and the sitewide
+     override of Novi's own .btn classes further down this file, so the two
+     systems cannot drift apart.
+
+     The label colour is purple on teal, not white on teal. Drupal's own
+     button is white on #0BAEA3, which measures 2.76:1 — below the WCAG AA
+     minimum of 4.5:1 for normal text, and below even the 3:1 large-text
+     floor. Once these tokens also drive checkout, registration and profile
+     buttons, that failure would be sitewide rather than decorative.
+
+     Purple on teal measures 6.14:1 and passes AA. It is also the pairing Novi
+     already uses (its teal button carries navy text, not white), so it is a
+     smaller perceptual change than it sounds.
+
+     To go Drupal-exact instead, change --smfm-btn-primary-fg to
+     var(--smfm-white). One line, both systems follow, contrast drops to
+     2.76:1. */
   --smfm-btn-primary-bg:     var(--smfm-teal);
-  --smfm-btn-primary-fg:     var(--smfm-white);
+  --smfm-btn-primary-fg:     var(--smfm-purple);
+  --smfm-btn-dark-bg:        var(--smfm-purple);
+  --smfm-btn-dark-fg:        var(--smfm-white);
   --smfm-btn-secondary-fg:   var(--smfm-teal-dark);
   --smfm-btn-secondary-bdr:  var(--smfm-teal-dark);
+  --smfm-btn-radius:         6px;
 }
 
 /* ==========================================================================
@@ -170,6 +184,85 @@ body {
   font-size: var(--smfm-lead);
   line-height: var(--smfm-lead-lh);
   color: var(--smfm-ink);
+}
+
+/* ==========================================================================
+   NOVI BUTTON HARMONISATION
+   --------------------------------------------------------------------------
+   This section reaches outside page content and restyles Novi's own .btn
+   classes, including on checkout, registration, profile and login. It is the
+   one deliberate exception to the typography-only rule above.
+
+   What Novi actually ships, audited across /membership-information and /login
+   on 2026-11-11 — only two real variants, plus two utility contexts:
+
+     .btn-primary      navy #084061 fill, white label, 50px pill
+     .btn-secondary    teal #5CB8B2 fill, navy #084061 label, 50px pill
+     .btn.search-go    transparent icon button, custom asymmetric padding
+     .log-out-btn      profile-menu rows styled as buttons: padding 0, 2px radius
+
+   MAPPING, and why it is not the obvious one:
+   Novi uses .btn-secondary for primary conversion actions — "Join as Regular
+   (MFM)" and "Create an Account" are both .btn-secondary. Mapping Novi's
+   "secondary" onto an outline button, which is what the Drupal design calls
+   secondary, would strip the visual weight off the main call to action on the
+   membership page. So the mapping follows how Novi uses these classes, not
+   what they are named:
+
+     .btn-primary    -> dark fill  (purple on white label)   was navy fill
+     .btn-secondary  -> accent fill (teal with purple label)  was teal fill
+
+   Both keep their existing fill-vs-fill relationship and relative weight;
+   only the hues and the shape change.
+
+   EXCLUSIONS: .search-go and .log-out-btn keep Novi's geometry. Forcing
+   button padding onto them collapses the search widget and the profile
+   dropdown, which are menu rows rather than buttons. They still take the new
+   colours so the dropdown stays coherent.
+   ========================================================================== */
+
+.btn:not(.search-go):not(.log-out-btn) {
+  font-family: var(--smfm-font-body) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  padding: 12px 24px !important;
+  border-radius: var(--smfm-btn-radius) !important;
+  border: 1px solid transparent !important;
+  text-transform: none !important;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Colours apply to the utility contexts too, so nothing is left on Novi's
+   old palette, but their geometry is untouched. */
+.btn.btn-primary,
+.btn.btn-primary:link,
+.btn.btn-primary:visited,
+.log-out-btn.btn-primary {
+  background-color: var(--smfm-btn-dark-bg) !important;
+  color: var(--smfm-btn-dark-fg) !important;
+  border-color: transparent !important;
+}
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.log-out-btn.btn-primary:hover {
+  background-color: var(--smfm-purple-mid) !important;
+  color: var(--smfm-white) !important;
+}
+
+.btn.btn-secondary,
+.btn.btn-secondary:link,
+.btn.btn-secondary:visited,
+.log-out-btn.btn-secondary {
+  background-color: var(--smfm-btn-primary-bg) !important;
+  color: var(--smfm-btn-primary-fg) !important;
+  border-color: transparent !important;
+}
+.btn.btn-secondary:hover,
+.btn.btn-secondary:focus,
+.log-out-btn.btn-secondary:hover {
+  background-color: var(--smfm-teal-dark) !important;
+  color: var(--smfm-white) !important;
 }
 
 /* ==========================================================================
